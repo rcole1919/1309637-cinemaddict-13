@@ -1,7 +1,8 @@
 import dayjs from 'dayjs';
 import {MAX_DESCRIPTION_SYMBOLS} from '../mock/const.js';
+import {createElement} from "../utils.js";
 
-export const createFilmCardTemplate = (film) => {
+const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, release, rating, genre, duration} = film;
 
   const getSmallDescription = (str) => {
@@ -29,3 +30,26 @@ export const createFilmCardTemplate = (film) => {
     </div>
   </article>`;
 };
+
+export default class FilmCard {
+  constructor(film) {
+    this.film = film;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createFilmCardTemplate(this.film);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
