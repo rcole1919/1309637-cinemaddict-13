@@ -1,15 +1,15 @@
-import {TITLES} from '../const.js';
-import {POSTERS} from '../const.js';
-import {DIRECTORS} from '../const.js';
-import {WRITERS} from '../const.js';
-import {ACTORS} from '../const.js';
-import {DESCRIPTION} from '../const.js';
-import {MIN_PINS} from '../const.js';
-import {MAX_PINS} from '../const.js';
-import {MAX_RATING} from '../const.js';
-import {GENRES} from '../const.js';
-import {COUNTRIES} from '../const.js';
-import {AGE_RATINGS} from '../const.js';
+import {TITLES} from './const.js';
+import {POSTERS} from './const.js';
+import {DIRECTORS} from './const.js';
+import {WRITERS} from './const.js';
+import {ACTORS} from './const.js';
+import {DESCRIPTION} from './const.js';
+import {MIN_PINS} from './const.js';
+import {MAX_PINS} from './const.js';
+import {MAX_RATING} from './const.js';
+import {GENRES} from './const.js';
+import {COUNTRIES} from './const.js';
+import {AGE_RATINGS} from './const.js';
 import {getRandomInteger} from '../utils.js';
 import {getRandomRating} from '../utils.js';
 import {generatePin} from '../utils.js';
@@ -17,8 +17,6 @@ import {generateDescription} from '../utils.js';
 import {getRandomDate} from '../utils.js';
 import {getRandomArray} from '../utils.js';
 import {generateComment} from './comment.js';
-
-const comments = new Array(getRandomInteger(MIN_PINS, MAX_PINS)).fill().map(generateComment);
 
 export const generateFilm = () => {
   return {
@@ -29,7 +27,7 @@ export const generateFilm = () => {
     writers: getRandomArray(WRITERS),
     actors: getRandomArray(ACTORS),
     country: generatePin(COUNTRIES),
-    comments,
+    comments: new Array(getRandomInteger(MIN_PINS, MAX_PINS)).fill().map(generateComment),
     release: getRandomDate(),
     rating: getRandomRating(0, MAX_RATING),
     genre: getRandomArray(GENRES),

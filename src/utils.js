@@ -1,6 +1,10 @@
 import dayjs from 'dayjs';
-import {MIN_PINS} from './const.js';
-import {MAX_PINS} from './const.js';
+import {MIN_PINS} from './mock/const.js';
+import {MAX_PINS} from './mock/const.js';
+
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -45,4 +49,17 @@ export const getRandomArray = (array) => {
 
 export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
+};
+
+export const getRank = (num) => {
+  switch (true) {
+    case num >= 1 && num <= 10:
+      return `novice`;
+    case num >= 11 && num <= 20:
+      return `fan`;
+    case num >= 21:
+      return `movie buff`;
+    default:
+      return ``;
+  }
 };

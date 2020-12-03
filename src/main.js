@@ -16,11 +16,35 @@ import {createSortTemplate} from './view/sort.js';
 import {render} from './utils.js';
 
 const CARD_COUNT = 15;
-const CARD_EXTRA_COUNT = 10;
+const CARD_EXTRA_COUNT = 2;
 
 const films = new Array(CARD_COUNT).fill().map(generateFilm);
-const topFilms = new Array(CARD_EXTRA_COUNT).fill().map(generateFilm);
-const popularFilms = new Array(CARD_EXTRA_COUNT).fill().map(generateFilm);
+
+const topFilms = films
+  .slice()
+  .sort((a, b) => {
+    if (a.rating > b.rating) {
+      return -1;
+    }
+    if (a.rating < b.rating) {
+      return 1;
+    }
+    return 0;
+  })
+  .slice(0, CARD_EXTRA_COUNT);
+
+const popularFilms = films
+  .slice()
+  .sort((a, b) => {
+    if (a.comments.length > b.comments.length) {
+      return -1;
+    }
+    if (a.comments.length < b.comments.length) {
+      return 1;
+    }
+    return 0;
+  })
+  .slice(0, CARD_EXTRA_COUNT);
 
 const user = generateUser();
 
@@ -33,7 +57,7 @@ render(siteHeaderElement, createRankTemplate(user), `beforeend`);
 
 render(siteMainElement, createSiteMenuTemplate(), `afterbegin`);
 
-render(siteMainElement, createStatTemplate(user), `beforeend`);
+// render(siteMainElement, createStatTemplate(user), `beforeend`);
 
 render(siteMainElement, createFilmsTemplate(), `beforeend`);
 
@@ -71,10 +95,10 @@ render(footerStatisticsElement, createFilmNumberTemplate(films.length), `beforee
 
 const film = generateFilm();
 
-render(siteFooterElement, createPopupTemplate(film), `afterend`);
+// render(siteFooterElement, createPopupTemplate(film), `afterend`);
 
-const commentListElement = document.querySelector(`.film-details__comments-list`);
+// const commentListElement = document.querySelector(`.film-details__comments-list`);
 
-for (let i = 0; i < film.comments.length; i++) {
-  render(commentListElement, createCommentTemplate(film.comments[i]), `beforeend`);
-}
+// for (let i = 0; i < film.comments.length; i++) {
+//   render(commentListElement, createCommentTemplate(film.comments[i]), `beforeend`);
+// }
