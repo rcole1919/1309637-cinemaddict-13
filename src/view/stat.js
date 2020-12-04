@@ -1,4 +1,6 @@
-export const createStatTemplate = (user) => {
+import {createElement} from "../utils.js";
+
+const createStatTemplate = (user) => {
   const {watched, rank, avatar, topGenre} = user;
 
   return `<section class="statistic">
@@ -48,3 +50,26 @@ export const createStatTemplate = (user) => {
 
 </section>`;
 };
+
+export default class Stat {
+  constructor(user) {
+    this.user = user;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createStatTemplate(this.user);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

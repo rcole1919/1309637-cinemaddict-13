@@ -109,3 +109,4 @@ export const RANKS = [
   `fan`,
   `movie buff`
 ];
+

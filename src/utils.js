@@ -1,6 +1,41 @@
 import dayjs from 'dayjs';
-import {MIN_PINS} from './const.js';
-import {MAX_PINS} from './const.js';
+import {MIN_PINS} from './mock/const.js';
+import {MAX_PINS} from './mock/const.js';
+
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+  BEFOREBEGIN: `beforebegin`,
+  AFTEREND: `afterend`
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+    case RenderPosition.BEFOREBEGIN:
+      container.before(element);
+      break;
+    case RenderPosition.AFTEREND:
+      container.after(element);
+      break;
+  }
+};
+
+export const renderTemplate = (container, template, place) => {
+  container.insertAdjacentHTML(place, template);
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
+};
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -43,6 +78,15 @@ export const getRandomArray = (array) => {
   return randomArray;
 };
 
-export const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+export const getRank = (num) => {
+  switch (true) {
+    case num >= 1 && num <= 10:
+      return `novice`;
+    case num >= 11 && num <= 20:
+      return `fan`;
+    case num >= 21:
+      return `movie buff`;
+    default:
+      return ``;
+  }
 };
