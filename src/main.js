@@ -1,3 +1,5 @@
+import {CARD_EXTRA_COUNT} from './const.js';
+import {CARD_COUNT} from './mock/const.js';
 import Rank from './view/rank.js';
 import SiteMenuView from './view/site-menu.js';
 import FilmsContainer from './view/films-container.js';
@@ -14,9 +16,6 @@ import FilmListCommented from './view/list-commented.js';
 // import Stat from './view/stat.js';
 import Sort from './view/sort.js';
 import {render, RenderPosition} from './utils.js';
-
-const CARD_COUNT = 15;
-const CARD_EXTRA_COUNT = 2;
 
 const films = new Array(CARD_COUNT).fill().map(generateFilm);
 
