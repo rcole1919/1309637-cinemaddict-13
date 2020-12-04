@@ -15,7 +15,7 @@ import FilmListTop from './view/list-top.js';
 import FilmListCommented from './view/list-commented.js';
 // import Stat from './view/stat.js';
 import Sort from './view/sort.js';
-import {render, RenderPosition} from './utils.js';
+import {render, RenderPosition, onEscKeyDown} from './utils.js';
 
 const films = new Array(CARD_COUNT).fill().map(generateFilm);
 
@@ -60,9 +60,9 @@ render(siteMainElement, new FilmsContainer().getElement(), RenderPosition.BEFORE
 
 const filmsElement = document.querySelector(`.films`);
 
-render(filmsElement, new FilmList(films).getElement(), RenderPosition.BEFOREEND);
+render(filmsElement, new FilmList(films.length).getElement(), RenderPosition.BEFOREEND);
 
-if (films) {
+if (films.length) {
   render(filmsElement, new Sort().getElement(), RenderPosition.BEFOREBEGIN);
 
   render(filmsElement, new FilmListTop().getElement(), RenderPosition.BEFOREEND);
@@ -86,14 +86,19 @@ if (films) {
 
     document.querySelector(`body`).classList.add(`hide-overflow`);
 
-    const onPopupClose = (evt) => {
-      evt.preventDefault();
+    const onPopupClose = () => {
       popupComponent.getElement().querySelector(`.film-details__close-btn`).removeEventListener(`click`, onPopupClose);
       popupComponent.getElement().remove();
       document.querySelector(`body`).classList.remove(`hide-overflow`);
     };
 
+    const onPopupPressEsc = (evt) => {
+      onEscKeyDown(evt, onPopupClose);
+      document.removeEventListener(`keydown`, onPopupPressEsc);
+    };
+
     popupComponent.getElement().querySelector(`.film-details__close-btn`).addEventListener(`click`, onPopupClose);
+    document.addEventListener(`keydown`, onPopupPressEsc);
   };
 
   const renderFilm = (filmsContainer, film) => {

@@ -53,12 +53,12 @@ const createStatTemplate = (user) => {
 
 export default class Stat {
   constructor(user) {
-    this.user = user;
+    this._user = user;
     this._element = null;
   }
 
   getTemplate() {
-    return createStatTemplate(this.user);
+    return createStatTemplate(this._user);
   }
 
   getElement() {

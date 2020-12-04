@@ -14,7 +14,7 @@ export default class FilmList {
   }
 
   getTemplate() {
-    return createfilmListTemplate(this.exist);
+    return createfilmListTemplate(this._exist);
   }
 
   getElement() {

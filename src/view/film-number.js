@@ -6,12 +6,12 @@ const createFilmNumberTemplate = (num) => {
 
 export default class FilmNumber {
   constructor(num) {
-    this.num = num;
+    this._num = num;
     this._element = null;
   }
 
   getTemplate() {
-    return createFilmNumberTemplate(this.num);
+    return createFilmNumberTemplate(this._num);
   }
 
   getElement() {
