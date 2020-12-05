@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {MAX_DESCRIPTION_SYMBOLS} from '../mock/const.js';
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, release, rating, genre, duration} = film;
@@ -31,25 +31,27 @@ const createFilmCardTemplate = (film) => {
   </article>`;
 };
 
-export default class FilmCard {
+export default class FilmCard extends AbstractView {
   constructor(film) {
+    super();
     this._film = film;
-    this._element = null;
+
+    this._showClickHandler = this._showClickHandler.bind(this);
   }
 
   getTemplate() {
     return createFilmCardTemplate(this._film);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _showClickHandler(evt) {
+    evt.preventDefault();
+    this._callback.showClick();
   }
 
-  removeElement() {
-    this._element = null;
+  setShowClickHandler(callback) {
+    this._callback.showClick = callback;
+    this.getElement().querySelector(`.film-card__title`).addEventListener(`click`, this._showClickHandler);
+    this.getElement().querySelector(`.film-card__poster`).addEventListener(`click`, this._showClickHandler);
+    this.getElement().querySelector(`.film-card__comments`).addEventListener(`click`, this._showClickHandler);
   }
 }

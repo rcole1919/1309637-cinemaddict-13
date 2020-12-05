@@ -1,4 +1,4 @@
-import {createElement} from "../utils.js";
+import AbstractView from "./abstract.js";
 
 const createStatTemplate = (user) => {
   const {watched, rank, avatar, topGenre} = user;
@@ -51,25 +51,13 @@ const createStatTemplate = (user) => {
 </section>`;
 };
 
-export default class Stat {
+export default class Stat extends AbstractView {
   constructor(user) {
+    super();
     this._user = user;
-    this._element = null;
   }
 
   getTemplate() {
     return createStatTemplate(this._user);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

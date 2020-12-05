@@ -10,12 +10,12 @@ import {MAX_RATING} from './const.js';
 import {GENRES} from './const.js';
 import {COUNTRIES} from './const.js';
 import {AGE_RATINGS} from './const.js';
-import {getRandomInteger} from '../utils.js';
-import {getRandomRating} from '../utils.js';
-import {generatePin} from '../utils.js';
-import {generateDescription} from '../utils.js';
-import {getRandomDate} from '../utils.js';
-import {getRandomArray} from '../utils.js';
+import {getRandomInteger} from '../utils/common.js';
+import {getRandomRating} from '../utils/common.js';
+import {generatePin} from '../utils/common.js';
+import {generateDescription} from '../utils/common.js';
+import {getRandomDate} from '../utils/common.js';
+import {getRandomArray} from '../utils/common.js';
 import {generateComment} from './comment.js';
 
 export const generateFilm = () => {
