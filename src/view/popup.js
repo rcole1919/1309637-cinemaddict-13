@@ -131,12 +131,12 @@ const createPopupTemplate = (film) => {
 
 export default class Popup {
   constructor(film) {
-    this.film = film;
+    this._film = film;
     this._element = null;
   }
 
   getTemplate() {
-    return createPopupTemplate(this.film);
+    return createPopupTemplate(this._film);
   }
 
   getElement() {

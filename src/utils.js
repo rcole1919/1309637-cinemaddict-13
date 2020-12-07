@@ -90,3 +90,10 @@ export const getRank = (num) => {
       return ``;
   }
 };
+
+export const onEscKeyDown = (evt, cb) => {
+  if (evt.key === `Escape` || evt.key === `Esc`) {
+    evt.preventDefault();
+    cb();
+  }
+};

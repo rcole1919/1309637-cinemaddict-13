@@ -110,3 +110,4 @@ export const RANKS = [
   `movie buff`
 ];
 
+export const CARD_COUNT = 15;
