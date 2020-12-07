@@ -1,11 +1,5 @@
-import AbstractView from "./abstract.js";
-
-const createfilmListCommentedTemplate = () => {
-  return `<section class="films-list films-list--extra">
-    <h2 class="films-list__title">Most commented</h2>
-    <div class="films-list__container"></div>
-  </section>`;
-};
+import {createfilmListCommentedTemplate} from './list-commented-template.js';
+import AbstractView from './abstract.js';
 
 export default class FilmListCommented extends AbstractView {
   getTemplate() {

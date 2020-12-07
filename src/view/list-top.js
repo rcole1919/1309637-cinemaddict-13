@@ -1,11 +1,5 @@
-import AbstractView from "./abstract.js";
-
-const createfilmListTopTemplate = () => {
-  return `<section class="films-list films-list--extra">
-    <h2 class="films-list__title">Top rated</h2>
-    <div class="films-list__container"></div>
-  </section>`;
-};
+import {createfilmListTopTemplate} from './list-top-template.js';
+import AbstractView from './abstract.js';
 
 export default class FilmListTop extends AbstractView {
   getTemplate() {
