@@ -1,41 +1,7 @@
 import dayjs from 'dayjs';
-import {MIN_PINS} from './mock/const.js';
-import {MAX_PINS} from './mock/const.js';
-
-export const RenderPosition = {
-  AFTERBEGIN: `afterbegin`,
-  BEFOREEND: `beforeend`,
-  BEFOREBEGIN: `beforebegin`,
-  AFTEREND: `afterend`
-};
-
-export const render = (container, element, place) => {
-  switch (place) {
-    case RenderPosition.AFTERBEGIN:
-      container.prepend(element);
-      break;
-    case RenderPosition.BEFOREEND:
-      container.append(element);
-      break;
-    case RenderPosition.BEFOREBEGIN:
-      container.before(element);
-      break;
-    case RenderPosition.AFTEREND:
-      container.after(element);
-      break;
-  }
-};
-
-export const renderTemplate = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
-};
-
-export const createElement = (template) => {
-  const newElement = document.createElement(`div`);
-  newElement.innerHTML = template;
-
-  return newElement.firstChild;
-};
+import {MIN_PINS} from '../mock/const.js';
+import {MAX_PINS} from '../mock/const.js';
+import {CARD_EXTRA_COUNT} from '../const.js';
 
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -96,4 +62,23 @@ export const onEscKeyDown = (evt, cb) => {
     evt.preventDefault();
     cb();
   }
+};
+
+export const getExtraFilms = (arr, field) => {
+  const extraFilms = arr.slice()
+  .sort((a, b) => {
+    let x = a[field];
+    let y = b[field];
+    if (x > y) {
+      return -1;
+    }
+    if (x < y) {
+      return 1;
+    }
+    return 0;
+  })
+  .slice(0, CARD_EXTRA_COUNT);
+
+
+  return extraFilms;
 };

@@ -1,35 +1,8 @@
-import {createElement} from "../utils.js";
+import {createSiteMenuTemplate} from './site-menu-template.js';
+import AbstractView from './abstract.js';
 
-const createSiteMenuTemplate = () => {
-  return `<nav class="main-navigation">
-    <div class="main-navigation__items">
-      <a href="#all" class="main-navigation__item main-navigation__item--active">All movies</a>
-      <a href="#watchlist" class="main-navigation__item">Watchlist <span class="main-navigation__item-count">0</span></a>
-      <a href="#history" class="main-navigation__item">History <span class="main-navigation__item-count">0</span></a>
-      <a href="#favorites" class="main-navigation__item">Favorites <span class="main-navigation__item-count">0</span></a>
-    </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
-  </nav>`;
-};
-
-export default class SiteMenu {
-  constructor() {
-    this._element = null;
-  }
-
+export default class SiteMenu extends AbstractView {
   getTemplate() {
     return createSiteMenuTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
