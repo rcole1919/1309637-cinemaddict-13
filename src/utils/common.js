@@ -3,6 +3,8 @@ import {MIN_PINS} from '../mock/const.js';
 import {MAX_PINS} from '../mock/const.js';
 import {CARD_EXTRA_COUNT} from '../const.js';
 
+export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+
 export const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -81,4 +83,20 @@ export const getExtraFilms = (arr, field) => {
 
 
   return extraFilms;
+};
+
+export const sortByDate = (filmA, filmB) => {
+  return dayjs(filmB.release).diff(dayjs(filmA.release));
+};
+
+export const sortByRating = (filmA, filmB) => {
+  let a = filmA.rating;
+  let b = filmB.rating;
+  if (a > b) {
+    return -1;
+  }
+  if (a < b) {
+    return 1;
+  }
+  return 0;
 };

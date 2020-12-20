@@ -1,11 +1,11 @@
-import FilmCard from '../view/film-card.js';
-import Comment from '../view/comment.js';
-import Popup from '../view/popup.js';
+import FilmCard from '../view/film-card/film-card.js';
+import Comment from '../view/comment/comment.js';
+import Popup from '../view/popup/popup.js';
 import {render, remove, RenderPosition} from '../utils/render.js';
 import {onEscKeyDown} from '../utils/common.js';
 
 export default class Film {
-  constructor(filmListContainer, popupContainer, bodyElement) {
+  constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm) {
     this._filmListContainer = filmListContainer;
     this._popupContainer = popupContainer;
     this._bodyElement = bodyElement;
@@ -23,6 +23,7 @@ export default class Film {
 
     this._onClosePopupComponent = this._onClosePopupComponent.bind(this);
     this._onPopupPressEsc = this._onPopupPressEsc.bind(this);
+    this._setActiveFilm = setActiveFilm;
   }
 
   init(film) {
@@ -35,15 +36,28 @@ export default class Film {
     this._filmComponent.setOnWatchedButtonClick(this._onWatchedChange);
     this._filmComponent.setOnFavoriteButtonClick(this._onFavoriteChange);
 
-    render(this._filmListContainer, this._filmComponent, RenderPosition.BEFOREEND);
+    render(
+        this._filmListContainer,
+        this._filmComponent,
+        RenderPosition.BEFOREEND);
   }
 
   _renderPopup() {
     this._popupComponent = new Popup(this._film);
-    render(this._popupContainer, this._popupComponent, RenderPosition.AFTEREND);
+    this._setActiveFilm(this._popupComponent);
+    render(
+        this._popupContainer,
+        this._popupComponent,
+        RenderPosition.AFTEREND
+    );
 
     this._film.comments.forEach((el) => {
-      render(this._popupComponent.getElement().querySelector(`.film-details__comments-list`), new Comment(el), RenderPosition.BEFOREEND);
+      render(
+          this._popupComponent
+          .getElement()
+          .querySelector(`.film-details__comments-list`),
+          new Comment(el),
+          RenderPosition.BEFOREEND);
     });
 
     this._bodyElement.classList.add(`hide-overflow`);
@@ -58,9 +72,7 @@ export default class Film {
   }
 
   _onFilmComponentClick() {
-    if (!document.querySelector(`.film-details`)) {
-      this._renderPopup();
-    }
+    this._renderPopup();
   }
 
   _onWatchlistChange() {
@@ -82,5 +94,12 @@ export default class Film {
   _onPopupPressEsc(evt) {
     onEscKeyDown(evt, this._onClosePopupComponent);
     document.removeEventListener(`keydown`, this._onPopupPressEsc);
+  }
+
+  destroy() {
+    remove(this._filmComponent);
+    if (this._popupComponent) {
+      remove(this._popupComponent);
+    }
   }
 }

@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {MAX_DESCRIPTION_SYMBOLS} from '../mock/const.js';
+import {MAX_DESCRIPTION_SYMBOLS} from '../../mock/const.js';
 
 export const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, release, rating, genre, duration} = film;

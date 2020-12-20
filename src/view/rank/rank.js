@@ -1,5 +1,5 @@
 import {createRankTemplate} from './rank-template.js';
-import AbstractView from './abstract.js';
+import AbstractView from '../abstract.js';
 
 export default class Rank extends AbstractView {
   constructor(user) {
