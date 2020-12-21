@@ -28,6 +28,8 @@ export const render = (container, child, place) => {
     case RenderPosition.AFTEREND:
       container.after(child);
       break;
+    default:
+      return;
   }
 };
 

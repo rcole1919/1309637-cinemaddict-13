@@ -1,5 +1,5 @@
 import {createCommentTemplate} from './comment-template.js';
-import AbstractView from './abstract.js';
+import AbstractView from '../abstract.js';
 
 export default class Comment extends AbstractView {
   constructor(comment) {

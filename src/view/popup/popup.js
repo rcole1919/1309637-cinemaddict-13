@@ -1,5 +1,5 @@
 import {createPopupTemplate} from './popup-template.js';
-import AbstractView from './abstract.js';
+import AbstractView from '../abstract.js';
 
 export default class Popup extends AbstractView {
   constructor(film) {
