@@ -1,8 +1,9 @@
-import FilmCard from '../view/film-card/film-card.js';
-import Comment from '../view/comment/comment.js';
-import Popup from '../view/popup/popup.js';
-import {render, remove, RenderPosition} from '../utils/render.js';
-import {onEscKeyDown} from '../utils/common.js';
+import FilmCard from '../view/film-card/film-card';
+import Comment from '../view/comment/comment';
+import Emoji from '../view/emoji/emoji';
+import Popup from '../view/popup/popup';
+import {render, remove, RenderPosition} from '../utils/render';
+import {onEscKeyDown} from '../utils/common';
 
 export default class Film {
   constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm) {
@@ -14,8 +15,11 @@ export default class Film {
 
     this._filmComponent = null;
     this._popupComponent = null;
+    this._emojiComponent = null;
 
     this._onFilmComponentClick = this._onFilmComponentClick.bind(this);
+
+    this._onEmojiChange = this._onEmojiChange.bind(this);
 
     this._onWatchlistChange = this._onWatchlistChange.bind(this);
     this._onWatchedChange = this._onWatchedChange.bind(this);
@@ -64,11 +68,30 @@ export default class Film {
 
     this._popupComponent.setOnCloseClick(this._onClosePopupComponent);
 
+    this.setOnEmojiChange();
+
     this._popupComponent.setOnWatchlistChange(this._onWatchlistChange);
     this._popupComponent.setOnWatchedChange(this._onWatchedChange);
     this._popupComponent.setOnFavoriteChange(this._onFavoriteChange);
 
     document.addEventListener(`keydown`, this._onPopupPressEsc);
+  }
+
+  _onEmojiChange(evt) {
+    const emoji = evt.target.nextElementSibling.firstElementChild.src;
+    if (this._emojiComponent !== null) {
+      this._emojiComponent.removeElement();
+    }
+    this._emojiComponent = new Emoji(emoji);
+    const emojiContainer = this._popupComponent.getElement().querySelector(`.film-details__add-emoji-label`);
+    emojiContainer.textContent = ``;
+    render(emojiContainer, this._emojiComponent, RenderPosition.AFTERBEGIN);
+  }
+
+  setOnEmojiChange() {
+    this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
+      el.addEventListener(`change`, this._onEmojiChange);
+    });
   }
 
   _onFilmComponentClick() {

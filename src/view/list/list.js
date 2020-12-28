@@ -1,5 +1,5 @@
-import {createfilmListTemplate} from './list-template.js';
-import AbstractView from '../abstract.js';
+import {createfilmListTemplate} from './list-template';
+import AbstractView from '../abstract';
 
 export default class FilmList extends AbstractView {
   constructor(exist) {

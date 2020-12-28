@@ -1,5 +1,5 @@
-import AbstractView from '../abstract.js';
-import {createFilmsWrapperTemplate} from './films-wrapper-template.js';
+import AbstractView from '../abstract';
+import {createFilmsWrapperTemplate} from './films-wrapper-template';
 
 export default class FilmsContainer extends AbstractView {
   getTemplate() {

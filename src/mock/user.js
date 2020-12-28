@@ -1,7 +1,5 @@
-import {GENRES} from './const.js';
-import {getRandomInteger} from '../utils/common.js';
-import {generatePin} from '../utils/common.js';
-import {getRank} from '../utils/common.js';
+import {GENRES} from './const';
+import {getRandomInteger, generatePin, getRank} from '../utils/common';
 
 export const generateUser = () => {
   const watched = getRandomInteger(0, 30);

@@ -1,8 +1,5 @@
-import {MESSAGES} from './const.js';
-import {EMOJI} from './const.js';
-import {WRITERS} from './const.js';
-import {generatePin} from '../utils/common.js';
-import {getRandomDate} from '../utils/common.js';
+import {EMOJI, WRITERS, MESSAGES} from './const';
+import {generatePin, getRandomDate} from '../utils/common';
 
 export const generateComment = () => {
   return {

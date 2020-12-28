@@ -1,5 +1,5 @@
-import {createFilmCardTemplate} from './film-card-template.js';
-import AbstractView from '../abstract.js';
+import {createFilmCardTemplate} from './film-card-template';
+import AbstractView from '../abstract';
 
 export default class FilmCard extends AbstractView {
   constructor(film) {

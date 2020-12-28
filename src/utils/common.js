@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import {MIN_PINS} from '../mock/const.js';
-import {MAX_PINS} from '../mock/const.js';
-import {CARD_EXTRA_COUNT} from '../const.js';
+import {MIN_PINS, MAX_PINS} from '../mock/const';
+import {CARD_EXTRA_COUNT} from '../const';
 
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 

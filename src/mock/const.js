@@ -76,8 +76,6 @@ export const MIN_PINS = 1;
 
 export const MAX_PINS = 5;
 
-export const MAX_DESCRIPTION_SYMBOLS = 140;
-
 export const MAX_RATING = 10;
 
 export const GENRES = [
