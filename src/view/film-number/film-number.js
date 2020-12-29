@@ -1,5 +1,5 @@
-import {createFilmNumberTemplate} from './film-number-template.js';
-import AbstractView from '../abstract.js';
+import {createFilmNumberTemplate} from './film-number-template';
+import AbstractView from '../abstract';
 
 export default class FilmNumber extends AbstractView {
   constructor(num) {

@@ -1,14 +1,14 @@
-import Sort from '../view/sort/sort.js';
-import FilmsWrapper from '../view/films-wrapper/films-wrapper.js';
-import ShowMore from '../view/show-more/show-more.js';
-import FilmList from '../view/list/list.js';
-import FilmListTop from '../view/list-top/list-top.js';
-import FilmListCommented from '../view/list-commented/list-commented.js';
-import {render, RenderPosition, remove} from '../utils/render.js';
-import {getExtraFilms, sortByDate, sortByRating} from '../utils/common.js';
-import {CARD_COUNT} from '../mock/const.js';
-import FilmPresenter from './film.js';
-import {SortType, ExtraFilms} from '../const.js';
+import Sort from '../view/sort/sort';
+import FilmsWrapper from '../view/films-wrapper/films-wrapper';
+import ShowMore from '../view/show-more/show-more';
+import FilmList from '../view/list/list';
+import FilmListTop from '../view/list-top/list-top';
+import FilmListCommented from '../view/list-commented/list-commented';
+import {render, RenderPosition, remove} from '../utils/render';
+import {getExtraFilms, sortByDate, sortByRating} from '../utils/common';
+import {CARD_COUNT} from '../mock/const';
+import FilmPresenter from './film';
+import {SortType, ExtraFilms} from '../const';
 
 export default class Films {
   constructor(filmsContainer, popupContainer, bodyElement, films) {

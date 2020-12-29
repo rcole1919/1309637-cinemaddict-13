@@ -1,15 +1,4 @@
-import {TITLES} from './const.js';
-import {POSTERS} from './const.js';
-import {DIRECTORS} from './const.js';
-import {WRITERS} from './const.js';
-import {ACTORS} from './const.js';
-import {DESCRIPTION} from './const.js';
-import {MIN_PINS} from './const.js';
-import {MAX_PINS} from './const.js';
-import {MAX_RATING} from './const.js';
-import {GENRES} from './const.js';
-import {COUNTRIES} from './const.js';
-import {AGE_RATINGS} from './const.js';
+import {TITLES, POSTERS, DIRECTORS, WRITERS, ACTORS, DESCRIPTION, MIN_PINS, MAX_PINS, MAX_RATING, GENRES, COUNTRIES, AGE_RATINGS} from './const';
 import {getRandomInteger, getRandomRating, generatePin, generateDescription, getRandomDate, getRandomArray, generateId} from '../utils/common.js';
 import {generateComment} from './comment.js';
 

@@ -1,5 +1,5 @@
-import {createSortTemplate} from './sort-template.js';
-import AbstractView from '../abstract.js';
+import {createSortTemplate} from './sort-template';
+import AbstractView from '../abstract';
 
 export default class Sort extends AbstractView {
   constructor(currentSortType) {
@@ -13,7 +13,7 @@ export default class Sort extends AbstractView {
   }
 
   _onSortTypeChange(evt) {
-    if (evt.target.tagName !== `A`) {
+    if (evt.target.className !== `sort__button`) {
       return;
     }
 

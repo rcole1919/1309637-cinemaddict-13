@@ -1,11 +1,11 @@
-import {CARD_COUNT} from './mock/const.js';
-import Rank from './view/rank/rank.js';
-import SiteMenuView from './view/site-menu/site-menu.js';
-import {generateFilm} from './mock/film.js';
-import {generateUser} from './mock/user.js';
-import FilmNumber from './view/film-number/film-number.js';
-import {render, RenderPosition} from './utils/render.js';
-import FilmsPresenter from './presenter/films.js';
+import {CARD_COUNT} from './mock/const';
+import Rank from './view/rank/rank';
+import SiteMenuView from './view/site-menu/site-menu';
+import {generateFilm} from './mock/film';
+import {generateUser} from './mock/user';
+import FilmNumber from './view/film-number/film-number';
+import {render, RenderPosition} from './utils/render';
+import FilmsPresenter from './presenter/films';
 
 const films = new Array(CARD_COUNT).fill().map(generateFilm);
 

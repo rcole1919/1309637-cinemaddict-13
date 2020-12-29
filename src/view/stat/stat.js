@@ -1,5 +1,5 @@
-import {createStatTemplate} from './stat-template.js';
-import AbstractView from '../abstract.js';
+import {createStatTemplate} from './stat-template';
+import AbstractView from '../abstract';
 
 export default class Stat extends AbstractView {
   constructor(user) {

@@ -1,7 +1,7 @@
-import {createPopupTemplate} from './popup-template.js';
-import AbstractView from '../abstract.js';
+import {createPopupTemplate} from './popup-template';
+import SmartView from '../smart';
 
-export default class Popup extends AbstractView {
+export default class Popup extends SmartView {
   constructor(film) {
     super();
     this._film = film;
@@ -10,6 +10,10 @@ export default class Popup extends AbstractView {
     this._onWatchlistChange = this._onWatchlistChange.bind(this);
     this._onWatchedChange = this._onWatchedChange.bind(this);
     this._onFavoriteChange = this._onFavoriteChange.bind(this);
+  }
+
+  restoreHandlers() {
+
   }
 
   getTemplate() {
