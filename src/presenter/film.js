@@ -78,7 +78,7 @@ export default class Film {
   }
 
   _onEmojiChange(evt) {
-    const emoji = evt.target.nextElementSibling.firstElementChild.src;
+    const emoji = evt.currentTarget.value;
     if (this._emojiComponent !== null) {
       this._emojiComponent.removeElement();
     }
@@ -100,12 +100,15 @@ export default class Film {
 
   _onWatchlistChange() {
     this._film.isInWatchlist = !this._film.isInWatchlist;
+    this._filmComponent.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).classList.toggle(`film-card__controls-item--active`);
   }
   _onWatchedChange() {
     this._film.isWatched = !this._film.isWatched;
+    this._filmComponent.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).classList.toggle(`film-card__controls-item--active`);
   }
   _onFavoriteChange() {
     this._film.isFavorite = !this._film.isFavorite;
+    this._filmComponent.getElement().querySelector(`.film-card__controls-item--favorite`).classList.toggle(`film-card__controls-item--active`);
   }
 
   _onClosePopupComponent() {

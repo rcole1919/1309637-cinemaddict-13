@@ -55,7 +55,7 @@ export const createPopupTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${duration}</td>
+                <td class="film-details__cell">${dayjs().minute(duration).format(`h`)}h ${dayjs().minute(duration).format(`mm`)}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
