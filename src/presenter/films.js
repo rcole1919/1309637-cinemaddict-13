@@ -52,6 +52,7 @@ export default class Films {
       if (this._films.length > CARD_COUNT_PER_STEP) {
         this._renderShowMore();
       }
+      this._renderExtraFilm();
     }
   }
 
@@ -81,6 +82,7 @@ export default class Films {
     this._renderSort();
     this._clearFilms();
     this._renderFilms(0, this._renderedFilmCount);
+    this._renderExtraFilm();
   }
 
   _renderSort() {
@@ -122,7 +124,9 @@ export default class Films {
             .querySelector(`.films-list__container`)
         );
       });
+  }
 
+  _renderExtraFilm() {
     getExtraFilms(this._films, ExtraFilms.RATING).forEach((el) => {
       this._renderFilm(
           el,
@@ -152,8 +156,7 @@ export default class Films {
   }
 
   _onShowMoreClick() {
-    this._clearFilms();
-    this._renderFilms(0, this._renderedFilmCount + CARD_COUNT_PER_STEP);
+    this._renderFilms(this._renderedFilmCount, this._renderedFilmCount + CARD_COUNT_PER_STEP);
     this._renderedFilmCount += CARD_COUNT_PER_STEP;
 
     if (this._renderedFilmCount >= this._films.length) {
