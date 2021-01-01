@@ -6,7 +6,7 @@ import FilmListTop from '../view/list-top/list-top';
 import FilmListCommented from '../view/list-commented/list-commented';
 import {render, RenderPosition, remove} from '../utils/render';
 import {getExtraFilms, sortByDate, sortByRating} from '../utils/common';
-import {CARD_COUNT} from '../mock/const';
+import {CARD_COUNT_PER_STEP} from '../const';
 import FilmPresenter from './film';
 import {SortType, ExtraFilms} from '../const';
 
@@ -15,7 +15,7 @@ export default class Films {
     this._filmsContainer = filmsContainer;
     this._popupContainer = popupContainer;
     this._bodyElement = bodyElement;
-    this._cardCount = CARD_COUNT;
+    this._renderedFilmCount = CARD_COUNT_PER_STEP;
     this._filmPresenters = [];
     this._currentSortType = SortType.DEFAULT;
 
@@ -31,6 +31,7 @@ export default class Films {
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._setActiveFilm = this._setActiveFilm.bind(this);
+    this._onShowMoreClick = this._onShowMoreClick.bind(this);
     this._activeFilm = null;
   }
 
@@ -47,8 +48,10 @@ export default class Films {
       this._renderSort();
       this._renderFilmListTop();
       this._renderFilmListCommented();
-      this._renderFilms();
-      this._renderShowMore();
+      this._renderFilms(0, Math.min(this._films.length, CARD_COUNT_PER_STEP));
+      if (this._films.length > CARD_COUNT_PER_STEP) {
+        this._renderShowMore();
+      }
     }
   }
 
@@ -77,7 +80,7 @@ export default class Films {
     remove(this._sortComponent);
     this._renderSort();
     this._clearFilms();
-    this._renderFilms();
+    this._renderFilms(0, this._renderedFilmCount);
   }
 
   _renderSort() {
@@ -108,15 +111,17 @@ export default class Films {
     this._filmPresenters.push(filmPresenter);
   }
 
-  _renderFilms() {
-    this._films.forEach((el) => {
-      this._renderFilm(
-          el,
-          this._filmListComponent
-          .getElement()
-          .querySelector(`.films-list__container`)
-      );
-    });
+  _renderFilms(from, to) {
+    this._films
+      .slice(from, to)
+      .forEach((el) => {
+        this._renderFilm(
+            el,
+            this._filmListComponent
+            .getElement()
+            .querySelector(`.films-list__container`)
+        );
+      });
 
     getExtraFilms(this._films, ExtraFilms.RATING).forEach((el) => {
       this._renderFilm(
@@ -143,6 +148,17 @@ export default class Films {
         this._showMoreComponent,
         RenderPosition.BEFOREEND
     );
+    this._showMoreComponent.setOnShowMoreClick(this._onShowMoreClick);
+  }
+
+  _onShowMoreClick() {
+    this._clearFilms();
+    this._renderFilms(0, this._renderedFilmCount + CARD_COUNT_PER_STEP);
+    this._renderedFilmCount += CARD_COUNT_PER_STEP;
+
+    if (this._renderedFilmCount >= this._films.length) {
+      remove(this._showMoreComponent);
+    }
   }
 
   _renderFilmList() {
