@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import {MAX_DESCRIPTION_SYMBOLS} from '../../const';
+import {getFilmDuration} from '../../utils/common';
 
 export const createFilmCardTemplate = (film) => {
   const {title, poster, description, comments, release, rating, genre, duration, isInWatchlist, isWatched, isFavorite} = film;
@@ -16,7 +17,7 @@ export const createFilmCardTemplate = (film) => {
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${dayjs(release.toString()).year()}</span>
-      <span class="film-card__duration">${dayjs().minute(duration).format(`h`)}h ${dayjs().minute(duration).format(`mm`)}m</span>
+      <span class="film-card__duration">${getFilmDuration(duration)}</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="./images/posters/${poster}" alt="${title}" class="film-card__poster">
