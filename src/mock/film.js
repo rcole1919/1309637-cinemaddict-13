@@ -17,7 +17,7 @@ export const generateFilm = () => {
     rating: getRandomRating(0, MAX_RATING),
     genre: getRandomArray(GENRES),
     ageRating: generatePin(AGE_RATINGS),
-    duration: `${getRandomInteger(0, 4)}h ${getRandomInteger(0, 59)}m`,
+    duration: getRandomInteger(70, 200),
     isInWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
     isFavorite: Boolean(getRandomInteger(0, 1))

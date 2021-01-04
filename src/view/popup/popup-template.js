@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {getFilmDuration} from '../../utils/common';
 
 export const createPopupTemplate = (film) => {
   const {title, poster, description, director, writers, actors, country, comments, release, rating, genre, ageRating, duration, isInWatchlist, isWatched, isFavorite} = film;
@@ -55,7 +56,7 @@ export const createPopupTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${duration}</td>
+                <td class="film-details__cell">${getFilmDuration(duration)}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>

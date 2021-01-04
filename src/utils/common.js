@@ -11,6 +11,13 @@ export const getRandomInteger = (a = 0, b = 1) => {
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
 
+export const getFilmDuration = (min) => {
+  const hoursValue = Math.floor(min / 60);
+  const minValue = min % 60;
+
+  return `${hoursValue !== 0 ? `${hoursValue}h` : ``} ${minValue.toString().length === 1 ? `0${minValue}` : minValue}m`;
+};
+
 export const getRandomRating = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
