@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
 import {MIN_PINS, MAX_PINS} from '../mock/const';
-import {CARD_EXTRA_COUNT} from '../const';
+import {CARD_EXTRA_COUNT, RankType} from '../const';
 
 export const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
 
@@ -55,18 +55,25 @@ export const getRandomArray = (array) => {
 export const getRank = (num) => {
   switch (true) {
     case num >= 1 && num <= 10:
-      return `novice`;
+      return RankType.NOVICE;
     case num >= 11 && num <= 20:
-      return `fan`;
+      return RankType.FAN;
     case num >= 21:
-      return `movie buff`;
+      return RankType.MOVIE_BUFF;
     default:
-      return ``;
+      return RankType.NONE;
   }
 };
 
 export const onEscKeyDown = (evt, cb) => {
   if (evt.key === `Escape` || evt.key === `Esc`) {
+    evt.preventDefault();
+    cb();
+  }
+};
+
+export const onCtrlEnterDown = (evt, cb) => {
+  if (evt.ctrlKey && evt.key === `Enter`) {
     evt.preventDefault();
     cb();
   }

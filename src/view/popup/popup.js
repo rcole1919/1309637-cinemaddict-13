@@ -13,7 +13,10 @@ export default class Popup extends SmartView {
   }
 
   restoreHandlers() {
-
+    this.setOnCloseClick(this._callback.hidePopup);
+    this.setOnWatchlistChange(this._callback.changeWatchlist);
+    this.setOnWatchedChange(this._callback.changeWatched);
+    this.setOnFavoriteChange(this._callback.changeFavorite);
   }
 
   getTemplate() {

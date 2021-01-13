@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {getFilmDuration} from '../../utils/common';
 
 export const createPopupTemplate = (film) => {
-  const {title, poster, description, director, writers, actors, country, comments, release, rating, genre, ageRating, duration, isInWatchlist, isWatched, isFavorite} = film;
+  const {title, poster, description, director, writers, actors, country, release, rating, genre, ageRating, duration, isInWatchlist, isWatched, isFavorite} = film;
 
   const generateGenres = (arr) => {
     let sum = ``;
@@ -90,7 +90,7 @@ export const createPopupTemplate = (film) => {
 
       <div class="film-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${comments.length}</span></h3>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">0</span></h3>
 
           <ul class="film-details__comments-list"></ul>
 

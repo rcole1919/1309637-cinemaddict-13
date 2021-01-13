@@ -1,4 +1,4 @@
-import {createfilmListTemplate} from './list-template';
+import {createFilmListTemplate} from './list-template';
 import AbstractView from '../abstract';
 
 export default class FilmList extends AbstractView {
@@ -8,6 +8,6 @@ export default class FilmList extends AbstractView {
   }
 
   getTemplate() {
-    return createfilmListTemplate(this._exist);
+    return createFilmListTemplate(this._exist);
   }
 }
