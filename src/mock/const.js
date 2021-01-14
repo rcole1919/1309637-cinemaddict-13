@@ -89,23 +89,17 @@ export const GENRES = [
 ];
 
 export const MESSAGES = [
-  `Interesting setting and a good cast`,
+  `Interesting <a href="#">1231231</a> setting and a good cast`,
   `Booooooooooring`,
   `Very very old. Meh`,
   `Almost two hours? Seriously?`
 ];
 
 export const EMOJI = [
-  `angry.png`,
-  `puke.png`,
-  `sleeping.png`,
-  `smile.png`
+  `angry`,
+  `puke`,
+  `sleeping`,
+  `smile`
 ];
 
-export const RANKS = [
-  `novice`,
-  `fan`,
-  `movie buff`
-];
-
-export const CARD_COUNT = 15;
+export const CARD_COUNT = 16;
