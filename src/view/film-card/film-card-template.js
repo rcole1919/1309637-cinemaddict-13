@@ -12,12 +12,14 @@ export const createFilmCardTemplate = (film) => {
     return `${str.split(``).slice(0, MAX_DESCRIPTION_SYMBOLS - 1).join(``)}...`;
   };
 
+  const filmDuration = getFilmDuration(duration);
+
   return `<article class="film-card">
     <h3 class="film-card__title">${title}</h3>
     <p class="film-card__rating">${rating}</p>
     <p class="film-card__info">
       <span class="film-card__year">${dayjs(release.toString()).year()}</span>
-      <span class="film-card__duration">${getFilmDuration(duration)}</span>
+      <span class="film-card__duration">${filmDuration.hours !== 0 ? `${filmDuration.hours}h` : ``} ${filmDuration.min.toString().length === 1 ? `0${filmDuration.min}` : filmDuration.min}m</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
     <img src="./images/posters/${poster}" alt="${title}" class="film-card__poster">

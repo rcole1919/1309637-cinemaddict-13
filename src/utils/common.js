@@ -15,7 +15,10 @@ export const getFilmDuration = (min) => {
   const hoursValue = Math.floor(min / 60);
   const minValue = min % 60;
 
-  return `${hoursValue !== 0 ? `${hoursValue}h` : ``} ${minValue.toString().length === 1 ? `0${minValue}` : minValue}m`;
+  return {
+    hours: hoursValue,
+    min: minValue
+  };
 };
 
 export const getRandomRating = (a = 0, b = 1) => {
@@ -41,7 +44,7 @@ export const generateDescription = (str, min, max) => {
 };
 
 export const getRandomDate = () => {
-  return dayjs(Math.random() * (dayjs() - dayjs(`01/01/1900`)) + dayjs(`01/01/1900`));
+  return dayjs(Math.random() * (dayjs() - dayjs(`01/01/2021`)) + dayjs(`01/01/2021`));
 };
 
 export const getRandomArray = (array) => {
@@ -113,3 +116,60 @@ export const sortByRating = (filmA, filmB) => {
   }
   return 0;
 };
+
+export const getTopGenre = (films) => {
+  if (films.length !== 0) {
+    let allGenres = [];
+    films.forEach((el) => {
+      allGenres.push(...el.genre);
+    });
+
+    let genreKeys = Array.from(new Set(allGenres));
+
+    let genresLength = [];
+
+    genreKeys.forEach((el) => {
+      genresLength.push({
+        genre: el,
+        num: allGenres.filter((item) => item === el).length
+      });
+    });
+
+    return genresLength.sort((a, b) => a.num - b.num)[genresLength.length - 1].genre;
+  }
+  return ``;
+};
+
+export const getChartData = (films) => {
+  let allGenres = [];
+  films.forEach((el) => {
+    allGenres.push(...el.genre);
+  });
+  let genreKeys = Array.from(new Set(allGenres));
+  let genresLength = [];
+
+  genreKeys.forEach((el) => {
+    genresLength.push({
+      genre: el,
+      num: allGenres.filter((item) => item === el).length
+    });
+  });
+
+  genresLength
+    .sort((a, b) => a.num - b.num)
+    .reverse();
+
+  let chartLabels = [];
+  genresLength.forEach((el) => {
+    chartLabels.push(el.genre);
+  });
+  let chartData = [];
+  genresLength.forEach((el) => {
+    chartData.push(el.num);
+  });
+  return {
+    labels: chartLabels,
+    data: chartData
+  };
+};
+

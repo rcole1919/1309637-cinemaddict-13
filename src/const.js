@@ -4,6 +4,8 @@ export const CARD_COUNT_PER_STEP = 5;
 
 export const MAX_DESCRIPTION_SYMBOLS = 140;
 
+export const BAR_HEIGHT = 50;
+
 export const RankType = {
   NOVICE: `novice`,
   FAN: `fan`,
@@ -38,4 +40,17 @@ export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
   MAJOR: `MAJOR`
+};
+
+export const ViewStateType = {
+  FILMS: `FILMS`,
+  STATS: `STATS`
+};
+
+export const StatFilterType = {
+  ALL_TIME: `ALL_TIME`,
+  TODAY: `TODAY`,
+  WEEK: `WEEK`,
+  MONTH: `MONTH`,
+  YEAR: `YEAR`
 };

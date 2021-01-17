@@ -102,4 +102,4 @@ export const EMOJI = [
   `smile`
 ];
 
-export const CARD_COUNT = 16;
+export const CARD_COUNT = 36;

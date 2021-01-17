@@ -12,7 +12,7 @@ export const createCommentTemplate = (comment) => {
       <p class="film-details__comment-text">${he.encode(message)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${dayjs(date.toString()).format(`YYYY/MM/DD hh:mm`)}</span>
+        <span class="film-details__comment-day">${dayjs(date.toString()).format(`YYYY/MM/DD HH:mm`)}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>

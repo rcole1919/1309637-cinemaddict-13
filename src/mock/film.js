@@ -20,7 +20,8 @@ export const generateFilm = () => {
     duration: getRandomInteger(70, 200),
     isInWatchlist: Boolean(getRandomInteger(0, 1)),
     isWatched: Boolean(getRandomInteger(0, 1)),
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    watchingDate: getRandomDate()
   };
 };
 

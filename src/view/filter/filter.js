@@ -2,16 +2,17 @@ import {createFilterTemplate} from './filter-template';
 import AbstractView from '../abstract';
 
 export default class Filter extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, currentViewStateType) {
     super();
     this._filters = filters;
     this._currentFilter = currentFilterType;
+    this._currentViewStateType = currentViewStateType;
 
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
   }
 
   getTemplate() {
-    return createFilterTemplate(this._filters, this._currentFilter);
+    return createFilterTemplate(this._filters, this._currentFilter, this._currentViewStateType);
   }
 
   _onFilterTypeChange(evt) {

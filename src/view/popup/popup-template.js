@@ -12,6 +12,8 @@ export const createPopupTemplate = (film) => {
     return sum;
   };
 
+  const filmDuration = getFilmDuration(duration);
+
   return `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
@@ -56,7 +58,7 @@ export const createPopupTemplate = (film) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Runtime</td>
-                <td class="film-details__cell">${getFilmDuration(duration)}</td>
+                <td class="film-details__cell">${filmDuration.hours !== 0 ? `${filmDuration.hours}h` : ``} ${filmDuration.min.toString().length === 1 ? `0${filmDuration.min}` : filmDuration.min}m</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
