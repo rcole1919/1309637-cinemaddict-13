@@ -180,6 +180,11 @@ export default class Film {
   }
   _onWatchedChange() {
     this._film.isWatched = !this._film.isWatched;
+    if (this._film.isWatched) {
+      this._film.watchingDate = dayjs();
+    } else {
+      this._film.watchingDate = ``;
+    }
     this._filmComponent.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).classList.toggle(`film-card__controls-item--active`);
     this._onFilmListUpdate();
   }

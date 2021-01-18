@@ -1,27 +1,35 @@
 import Sort from '../view/sort/sort';
+import Rank from '../view/rank/rank';
 import FilmsWrapper from '../view/films-wrapper/films-wrapper';
+import StatWrapper from '../view/stat-wrapper/stat-wrapper';
 import ShowMore from '../view/show-more/show-more';
 import FilmList from '../view/list/list';
+import Stat from '../view/stat/stat';
+import StatButton from '../view/stat-button/stat-button';
+import StatFilter from '../view/stat-filter/stat-filter';
 import FilmListTop from '../view/list-top/list-top';
 import FilmListCommented from '../view/list-commented/list-commented';
 import {render, RenderPosition, remove} from '../utils/render';
 import {getExtraFilms, sortByDate, sortByRating} from '../utils/common';
 import {CARD_COUNT_PER_STEP} from '../const';
 import FilmPresenter from './film';
-import {SortType, FilterType, ExtraFilms, UserAction, UpdateType} from '../const';
+import {SortType, FilterType, ExtraFilms, UserAction, UpdateType, ViewStateType, StatFilterType} from '../const';
 import {filter} from '../utils/filter';
 import Filter from '../view/filter/filter';
 
 export default class Films {
-  constructor(filmsContainer, popupContainer, navContainer, bodyElement, filmsModel) {
+  constructor(rankContainer, filmsContainer, popupContainer, navContainer, bodyElement, filmsModel) {
     this._filmsContainer = filmsContainer;
+    this._rankContainer = rankContainer;
     this._popupContainer = popupContainer;
     this._navContainer = navContainer;
     this._bodyElement = bodyElement;
     this._renderedFilmCount = CARD_COUNT_PER_STEP;
     this._filmPresenters = [];
+    this._currentViewStateType = ViewStateType.FILMS;
     this._currentSortType = SortType.DEFAULT;
     this._currentFilterType = FilterType.ALL;
+    this._currentStatFilterType = StatFilterType.ALL_TIME;
     this._activeFilm = null;
 
     this._filmsModel = filmsModel;
@@ -33,11 +41,18 @@ export default class Films {
     this._filmListComponent = null;
     this._filmListTopComponent = new FilmListTop();
     this._filmListCommentedComponent = new FilmListCommented();
+    this._statWrapperComponent = new StatWrapper();
+    this._statButtonComponent = null;
+    this._statFilterComponent = null;
+    this._statComponent = null;
+    this._rankComponent = null;
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
+    this._onStatFilterChange = this._onStatFilterChange.bind(this);
     this._setActiveFilm = this._setActiveFilm.bind(this);
     this._onShowMoreClick = this._onShowMoreClick.bind(this);
+    this._onStatButtonClick = this._onStatButtonClick.bind(this);
     this._onViewAction = this._onViewAction.bind(this);
     this._onModelEvent = this._onModelEvent.bind(this);
 
@@ -53,7 +68,18 @@ export default class Films {
         RenderPosition.BEFOREEND
     );
 
+    render(
+        this._filmsContainer,
+        this._statWrapperComponent,
+        RenderPosition.BEFOREEND
+    );
+
+    this._renderRank();
+
     this._renderFilter();
+    this._renderStatButton();
+
+    this._showFilms();
 
     this._renderFilmList();
 
@@ -126,19 +152,21 @@ export default class Films {
     render(
         this._filmsWrapperComponent,
         this._sortComponent,
-        RenderPosition.BEFOREBEGIN
+        RenderPosition.AFTERBEGIN
     );
     this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
   }
 
   _onFilterTypeChange(filterType) {
-    if (this._currentFilterType === filterType) {
+    if (this._currentFilterType === filterType && this._currentViewStateType === ViewStateType.FILMS) {
       return;
     }
 
+    this._showFilms();
     this._currentFilterType = filterType;
     remove(this._filterComponent);
     this._renderFilter();
+
     this._clearFilms();
     this._renderedFilmCount = CARD_COUNT_PER_STEP;
     this._renderFilms(0, Math.min(this._getFilms().length, CARD_COUNT_PER_STEP));
@@ -151,7 +179,7 @@ export default class Films {
 
   _renderFilter() {
     const filters = this._getFilters();
-    this._filterComponent = new Filter(filters, this._currentFilterType);
+    this._filterComponent = new Filter(filters, this._currentFilterType, this._currentViewStateType);
 
     render(
         this._navContainer,
@@ -300,5 +328,96 @@ export default class Films {
     if (this._getFilms().length > CARD_COUNT_PER_STEP) {
       this._renderShowMore();
     }
+    remove(this._rankComponent);
+    this._renderRank();
+  }
+
+  _renderStatButton() {
+    this._statButtonComponent = new StatButton(this._currentViewStateType);
+    render(
+        this._navContainer,
+        this._statButtonComponent,
+        RenderPosition.BEFOREEND
+    );
+
+    this._statButtonComponent.setOnStatButtonClick(this._onStatButtonClick);
+  }
+
+  _onStatFilterChange(statFilterType) {
+    if (this._currentStatFilterType === statFilterType) {
+      return;
+    }
+
+    this._currentStatFilterType = statFilterType;
+    remove(this._statComponent);
+    this._renderStat();
+  }
+
+  _renderStatFilter() {
+    const watchedFilms = this._getFilms().filter((film) => film.isWatched);
+    this._statFilterComponent = new StatFilter(watchedFilms, this._currentStatFilterType);
+    render(
+        this._statWrapperComponent,
+        this._statFilterComponent,
+        RenderPosition.AFTERBEGIN
+    );
+
+    this._statFilterComponent.setOnStatFilterChange(this._onStatFilterChange);
+  }
+
+  _renderStat() {
+    const watchedFilms = this._getFilms().filter((film) => film.isWatched);
+    this._statComponent = new Stat(watchedFilms, this._currentStatFilterType);
+    render(
+        this._statWrapperComponent,
+        this._statComponent,
+        RenderPosition.BEFOREEND
+    );
+  }
+
+  _onStatButtonClick() {
+    this._showStats();
+  }
+
+  _showFilms() {
+    if (this._currentViewStateType === ViewStateType.FILMS) {
+      return;
+    }
+    this._filmsWrapperComponent.showElement();
+    this._statWrapperComponent.hideElement();
+    this._currentViewStateType = ViewStateType.FILMS;
+    this._currentStatFilterType = StatFilterType.ALL_TIME;
+    remove(this._statButtonComponent);
+    this._renderStatButton();
+    remove(this._statComponent);
+    remove(this._statFilterComponent);
+  }
+
+  _showStats() {
+    if (this._currentViewStateType === ViewStateType.STATS) {
+      return;
+    }
+    this._filmsWrapperComponent.hideElement();
+    this._statWrapperComponent.showElement();
+    this._currentViewStateType = ViewStateType.STATS;
+    this._currentSortType = SortType.DEFAULT;
+    remove(this._sortComponent);
+    this._renderSort();
+    remove(this._statButtonComponent);
+    this._renderStatButton();
+    remove(this._filterComponent);
+    this._renderFilter();
+    this._renderStatFilter();
+    this._renderStat();
+  }
+
+  _renderRank() {
+    this._rankComponent = new Rank(this._getFilms());
+
+    render(
+        this._rankContainer,
+        this._rankComponent,
+        RenderPosition.BEFOREEND
+    );
   }
 }
