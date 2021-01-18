@@ -48,9 +48,9 @@ export const ViewStateType = {
 };
 
 export const StatFilterType = {
-  ALL_TIME: `ALL_TIME`,
-  TODAY: `TODAY`,
-  WEEK: `WEEK`,
-  MONTH: `MONTH`,
-  YEAR: `YEAR`
+  ALL_TIME: `all-time`,
+  TODAY: `today`,
+  WEEK: `week`,
+  MONTH: `month`,
+  YEAR: `year`
 };

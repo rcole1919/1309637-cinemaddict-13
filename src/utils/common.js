@@ -44,7 +44,7 @@ export const generateDescription = (str, min, max) => {
 };
 
 export const getRandomDate = () => {
-  return dayjs(Math.random() * (dayjs() - dayjs(`01/01/2021`)) + dayjs(`01/01/2021`));
+  return dayjs(Math.random() * (dayjs() - dayjs(`12/12/2019`)) + dayjs(`12/12/2019`));
 };
 
 export const getRandomArray = (array) => {
@@ -172,4 +172,3 @@ export const getChartData = (films) => {
     data: chartData
   };
 };
-

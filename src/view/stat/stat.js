@@ -4,6 +4,7 @@ import {BAR_HEIGHT} from '../../const';
 import AbstractView from '../abstract';
 import Chart from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
+import {getFiltredWatchedFilms} from '../../utils/filter';
 
 const renderChart = (ctx, films) => {
   return new Chart(ctx, {
@@ -81,7 +82,7 @@ export default class Stat extends AbstractView {
 
   _setChart() {
     if (this._films.length !== 0) {
-      renderChart(this._ctx, this._films);
+      renderChart(this._ctx, getFiltredWatchedFilms(this._films, this._currentStatFilterType));
     }
   }
 }

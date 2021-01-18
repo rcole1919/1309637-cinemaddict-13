@@ -6,6 +6,7 @@ import ShowMore from '../view/show-more/show-more';
 import FilmList from '../view/list/list';
 import Stat from '../view/stat/stat';
 import StatButton from '../view/stat-button/stat-button';
+import StatFilter from '../view/stat-filter/stat-filter';
 import FilmListTop from '../view/list-top/list-top';
 import FilmListCommented from '../view/list-commented/list-commented';
 import {render, RenderPosition, remove} from '../utils/render';
@@ -28,7 +29,7 @@ export default class Films {
     this._currentViewStateType = ViewStateType.FILMS;
     this._currentSortType = SortType.DEFAULT;
     this._currentFilterType = FilterType.ALL;
-    this._currentSortFilterType = StatFilterType.ALL_TIME;
+    this._currentStatFilterType = StatFilterType.ALL_TIME;
     this._activeFilm = null;
 
     this._filmsModel = filmsModel;
@@ -42,11 +43,13 @@ export default class Films {
     this._filmListCommentedComponent = new FilmListCommented();
     this._statWrapperComponent = new StatWrapper();
     this._statButtonComponent = null;
+    this._statFilterComponent = null;
     this._statComponent = null;
     this._rankComponent = null;
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
+    this._onStatFilterChange = this._onStatFilterChange.bind(this);
     this._setActiveFilm = this._setActiveFilm.bind(this);
     this._onShowMoreClick = this._onShowMoreClick.bind(this);
     this._onStatButtonClick = this._onStatButtonClick.bind(this);
@@ -340,9 +343,31 @@ export default class Films {
     this._statButtonComponent.setOnStatButtonClick(this._onStatButtonClick);
   }
 
+  _onStatFilterChange(statFilterType) {
+    if (this._currentStatFilterType === statFilterType) {
+      return;
+    }
+
+    this._currentStatFilterType = statFilterType;
+    remove(this._statComponent);
+    this._renderStat();
+  }
+
+  _renderStatFilter() {
+    const watchedFilms = this._getFilms().filter((film) => film.isWatched);
+    this._statFilterComponent = new StatFilter(watchedFilms, this._currentStatFilterType);
+    render(
+        this._statWrapperComponent,
+        this._statFilterComponent,
+        RenderPosition.AFTERBEGIN
+    );
+
+    this._statFilterComponent.setOnStatFilterChange(this._onStatFilterChange);
+  }
+
   _renderStat() {
     const watchedFilms = this._getFilms().filter((film) => film.isWatched);
-    this._statComponent = new Stat(watchedFilms, this._currentSortFilterType);
+    this._statComponent = new Stat(watchedFilms, this._currentStatFilterType);
     render(
         this._statWrapperComponent,
         this._statComponent,
@@ -361,9 +386,11 @@ export default class Films {
     this._filmsWrapperComponent.showElement();
     this._statWrapperComponent.hideElement();
     this._currentViewStateType = ViewStateType.FILMS;
+    this._currentStatFilterType = StatFilterType.ALL_TIME;
     remove(this._statButtonComponent);
     this._renderStatButton();
     remove(this._statComponent);
+    remove(this._statFilterComponent);
   }
 
   _showStats() {
@@ -380,6 +407,7 @@ export default class Films {
     this._renderStatButton();
     remove(this._filterComponent);
     this._renderFilter();
+    this._renderStatFilter();
     this._renderStat();
   }
 
