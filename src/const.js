@@ -33,13 +33,15 @@ export const FilterType = {
 
 export const UserAction = {
   ADD_COMMENT: `ADD_COMMENT`,
-  DELETE_COMMENT: `DELETE_COMMENT`
+  DELETE_COMMENT: `DELETE_COMMENT`,
+  UPDATE_FILM: `UPDATE_FILM`
 };
 
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`
 };
 
 export const ViewStateType = {
@@ -54,3 +56,19 @@ export const StatFilterType = {
   MONTH: `month`,
   YEAR: `year`
 };
+
+export const Method = {
+  GET: `GET`,
+  PUT: `PUT`
+};
+
+export const SuccessHHTPStatusRange = {
+  MIN: 200,
+  MAX: 299
+};
+
+export const AUTHORIZATION = `Basic t2i4titi5ky7if3`;
+
+export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
+
+export const ERROR_COMMENTS_UPLOAD = `failed to load`;

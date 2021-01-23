@@ -6,14 +6,17 @@ import {render, remove, RenderPosition} from '../utils/render';
 import {onEscKeyDown, onCtrlEnterDown, generateId} from '../utils/common';
 import {UserAction, UpdateType} from '../const';
 import dayjs from 'dayjs';
+import {ERROR_COMMENTS_UPLOAD} from '../const';
 
 export default class Film {
-  constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm, onFilmListUpdate, onViewAction) {
+  constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm, onFilmListUpdate, onViewAction, api) {
     this._filmListContainer = filmListContainer;
     this._popupContainer = popupContainer;
     this._bodyElement = bodyElement;
 
     this._film = null;
+    this._comments = null;
+    this._api = api;
 
     this._filmComponent = null;
     this._popupComponent = null;
@@ -54,7 +57,11 @@ export default class Film {
         RenderPosition.BEFOREEND);
   }
 
-  _renderPopup() {
+  setComments(comments) {
+    this._comments = comments.slice();
+  }
+
+  _renderPopup(isCommentUpload) {
     this._popupComponent = new Popup(this._film);
     this._setActiveFilm(this._popupComponent);
     render(
@@ -63,7 +70,12 @@ export default class Film {
         RenderPosition.AFTEREND
     );
 
-    this._renderComments();
+    if (isCommentUpload) {
+      this._renderComments();
+    } else {
+      this._popupComponent.getElement().querySelector(`.film-details__comments-count`).textContent = ERROR_COMMENTS_UPLOAD;
+      this._popupComponent.getElement().querySelector(`.film-details__new-comment`).style.display = `none`;
+    }
 
     this._bodyElement.classList.add(`hide-overflow`);
 
@@ -124,7 +136,7 @@ export default class Film {
   }
 
   _renderComments() {
-    this._film.comments.forEach((el, i) => {
+    this._comments.forEach((el, i) => {
       this._commentComponents.push(new Comment(el));
       render(
           this._popupComponent
@@ -170,12 +182,25 @@ export default class Film {
   }
 
   _onFilmComponentClick() {
-    this._renderPopup();
+    this._api.getComments(this._film)
+      .then((comments) => {
+        this.setComments(comments);
+        this._renderPopup(true);
+      })
+      .catch(() => {
+        this.setComments([]);
+        this._renderPopup(false);
+      });
   }
 
   _onWatchlistChange() {
     this._film.isInWatchlist = !this._film.isInWatchlist;
     this._filmComponent.getElement().querySelector(`.film-card__controls-item--add-to-watchlist`).classList.toggle(`film-card__controls-item--active`);
+    this._onViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
+        this._film
+    );
     this._onFilmListUpdate();
   }
   _onWatchedChange() {
@@ -186,11 +211,21 @@ export default class Film {
       this._film.watchingDate = ``;
     }
     this._filmComponent.getElement().querySelector(`.film-card__controls-item--mark-as-watched`).classList.toggle(`film-card__controls-item--active`);
+    this._onViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
+        this._film
+    );
     this._onFilmListUpdate();
   }
   _onFavoriteChange() {
     this._film.isFavorite = !this._film.isFavorite;
     this._filmComponent.getElement().querySelector(`.film-card__controls-item--favorite`).classList.toggle(`film-card__controls-item--active`);
+    this._onViewAction(
+        UserAction.UPDATE_FILM,
+        UpdateType.MAJOR,
+        this._film
+    );
     this._onFilmListUpdate();
   }
 
