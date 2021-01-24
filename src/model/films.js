@@ -35,11 +35,6 @@ export default class Films extends Observer {
   addComment(updateType, update) {
     const filmIndex = this._films.findIndex((film) => film.id === update.filmId);
 
-    // this._films[filmIndex].comments = [
-    //   ...this._films[filmIndex].comments,
-    //   update.comment
-    // ];
-
     this._films[filmIndex].comments = update.comments;
 
     this._notify(updateType, update);
