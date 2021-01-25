@@ -9,15 +9,16 @@ export const filter = {
 };
 
 export const getFiltredWatchedFilms = (films, currentFilter) => {
+  const now = dayjs();
   switch (currentFilter) {
     case StatFilterType.TODAY:
-      return films.filter((film) => dayjs(film.watchingDate).format(`D M YYYY`) === dayjs().format(`D M YYYY`));
+      return films.filter((film) => dayjs(film.watchingDate).isAfter(now.subtract(1, `day`)));
     case StatFilterType.WEEK:
-      return films;
+      return films.filter((film) => dayjs(film.watchingDate).isAfter(now.subtract(1, `week`)));
     case StatFilterType.MONTH:
-      return films.filter((film) => dayjs(film.watchingDate).format(`M YYYY`) === dayjs().format(`M YYYY`));
+      return films.filter((film) => dayjs(film.watchingDate).isAfter(now.subtract(1, `month`)));
     case StatFilterType.YEAR:
-      return films.filter((film) => dayjs(film.watchingDate).year() === dayjs().year());
+      return films.filter((film) => dayjs(film.watchingDate).isAfter(now.subtract(1, `year`)));
     default:
       return films;
   }

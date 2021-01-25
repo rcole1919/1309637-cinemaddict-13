@@ -1,7 +1,8 @@
-import {AUTHORIZATION, END_POINT, UpdateType} from './const';
+import {UpdateType} from './const';
+import {AUTHORIZATION, END_POINT} from './api/const';
 import FilmsPresenter from './presenter/films';
 import FilmsModel from './model/films';
-import Api from './api';
+import Api from './api/api';
 
 const api = new Api(END_POINT, AUTHORIZATION);
 

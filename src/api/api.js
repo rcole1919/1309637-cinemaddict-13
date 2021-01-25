@@ -1,5 +1,5 @@
 import {Method, SuccessHHTPStatusRange} from './const';
-import FilmsModel from './model/films';
+import FilmsModel from '../model/films';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -60,7 +60,7 @@ export default class Api {
         {method, body, headers}
     )
       .then(Api.checkStatus)
-      .catch(Api.checkError);
+      .catch(Api.catchError);
   }
 
   static checkStatus(response) {
