@@ -22,7 +22,7 @@ export const createFilmCardTemplate = (film) => {
       <span class="film-card__duration">${filmDuration.hours !== 0 ? `${filmDuration.hours}h` : ``} ${filmDuration.min.toString().length === 1 ? `0${filmDuration.min}` : filmDuration.min}m</span>
       <span class="film-card__genre">${genre[0]}</span>
     </p>
-    <img src="./images/posters/${poster}" alt="${title}" class="film-card__poster">
+    <img src="./${poster}" alt="${title}" class="film-card__poster">
     <p class="film-card__description">${getSmallDescription(description)}</p>
     <a class="film-card__comments">${comments.length} comments</a>
     <div class="film-card__controls">

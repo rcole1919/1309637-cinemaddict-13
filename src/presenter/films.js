@@ -9,6 +9,7 @@ import StatButton from '../view/stat-button/stat-button';
 import StatFilter from '../view/stat-filter/stat-filter';
 import FilmListTop from '../view/list-top/list-top';
 import FilmListCommented from '../view/list-commented/list-commented';
+import Loading from '../view/loading/loading';
 import {render, RenderPosition, remove} from '../utils/render';
 import {getExtraFilms, sortByDate, sortByRating} from '../utils/common';
 import {CARD_COUNT_PER_STEP} from '../const';
@@ -18,7 +19,7 @@ import {filter} from '../utils/filter';
 import Filter from '../view/filter/filter';
 
 export default class Films {
-  constructor(rankContainer, filmsContainer, popupContainer, navContainer, bodyElement, filmsModel) {
+  constructor(rankContainer, filmsContainer, popupContainer, navContainer, bodyElement, filmsModel, api) {
     this._filmsContainer = filmsContainer;
     this._rankContainer = rankContainer;
     this._popupContainer = popupContainer;
@@ -31,8 +32,10 @@ export default class Films {
     this._currentFilterType = FilterType.ALL;
     this._currentStatFilterType = StatFilterType.ALL_TIME;
     this._activeFilm = null;
+    this._isLoading = true;
 
     this._filmsModel = filmsModel;
+    this._api = api;
 
     this._filmsWrapperComponent = new FilmsWrapper();
     this._sortComponent = null;
@@ -46,6 +49,7 @@ export default class Films {
     this._statFilterComponent = null;
     this._statComponent = null;
     this._rankComponent = null;
+    this._loadingComponent = new Loading();
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
@@ -73,6 +77,15 @@ export default class Films {
         this._statWrapperComponent,
         RenderPosition.BEFOREEND
     );
+
+    this._renderBoard();
+  }
+
+  _renderBoard() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
 
     this._renderRank();
 
@@ -118,6 +131,11 @@ export default class Films {
       case UserAction.DELETE_COMMENT:
         this._filmsModel.deleteComment(updateType, update);
         break;
+      case UserAction.UPDATE_FILM:
+        this._api.updateFilms(update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
+        break;
       default:
         return;
     }
@@ -125,12 +143,14 @@ export default class Films {
 
   _onModelEvent(updateType) {
     switch (updateType) {
-      case UpdateType.PATCH:
-        break;
-      case UpdateType.MINOR:
-        break;
       case UpdateType.MAJOR:
         this._onFilmListUpdate();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
     }
   }
 
@@ -231,7 +251,8 @@ export default class Films {
         this._bodyElement,
         this._setActiveFilm,
         this._onFilmListUpdate,
-        this._onViewAction
+        this._onViewAction,
+        this._api
     );
     filmPresenter.init(film);
     this._filmPresenters.push(filmPresenter);
@@ -419,5 +440,9 @@ export default class Films {
         this._rankComponent,
         RenderPosition.BEFOREEND
     );
+  }
+
+  _renderLoading() {
+    render(this._filmsWrapperComponent, this._loadingComponent, RenderPosition.BEFOREEND);
   }
 }
