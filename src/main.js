@@ -26,4 +26,6 @@ const filmsPresenter = new FilmsPresenter(siteHeaderElement, siteMainElement, si
 
 filmsPresenter.init();
 
-
+window.addEventListener(`load`, () => {
+  navigator.serviceWorker.register(`/sw.js`);
+});

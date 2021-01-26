@@ -149,7 +149,7 @@ export default class Film {
               UpdateType.MAJOR,
               {
                 filmId: this._film.id,
-                comments: response.comments
+                comments: response.movie.comments
               }
           );
           this._updateComments();
