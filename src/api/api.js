@@ -1,5 +1,5 @@
 import {Method, SuccessHHTPStatusRange} from './const';
-import FilmsModel from './model/films';
+import FilmsModel from '../model/films';
 
 export default class Api {
   constructor(endPoint, authorization) {
@@ -24,6 +24,23 @@ export default class Api {
       .then(FilmsModel.adaptFilmToClient);
   }
 
+  deleteComment(commentId) {
+    return this._load({
+      url: `comments/${commentId}`,
+      method: Method.DELETE
+    });
+  }
+
+  addComment(filmId, comment) {
+    return this._load({
+      url: `comments/${filmId}`,
+      method: Method.POST,
+      body: JSON.stringify(FilmsModel.adaptCommentToServer(comment)),
+      headers: new Headers({"Content-Type": `application/json`})
+    })
+      .then(Api.toJSON);
+  }
+
   getComments(film) {
     return this._load({url: `comments/${film.id}`})
       .then(Api.toJSON)
@@ -43,7 +60,7 @@ export default class Api {
         {method, body, headers}
     )
       .then(Api.checkStatus)
-      .catch(Api.checkError);
+      .catch(Api.catchError);
   }
 
   static checkStatus(response) {

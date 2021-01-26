@@ -6,6 +6,12 @@ export const MAX_DESCRIPTION_SYMBOLS = 140;
 
 export const BAR_HEIGHT = 50;
 
+export const ERROR_COMMENTS_UPLOAD = `failed to load`;
+
+export const COMMENT_DELETING = `deleting`;
+
+export const ERROR_COMMENTS_DELETE = `failed to delete, try later`;
+
 export const RankType = {
   NOVICE: `novice`,
   FAN: `fan`,
@@ -56,19 +62,3 @@ export const StatFilterType = {
   MONTH: `month`,
   YEAR: `year`
 };
-
-export const Method = {
-  GET: `GET`,
-  PUT: `PUT`
-};
-
-export const SuccessHHTPStatusRange = {
-  MIN: 200,
-  MAX: 299
-};
-
-export const AUTHORIZATION = `Basic t2i4titi5ky7if3`;
-
-export const END_POINT = `https://13.ecmascript.pages.academy/cinemaddict`;
-
-export const ERROR_COMMENTS_UPLOAD = `failed to load`;

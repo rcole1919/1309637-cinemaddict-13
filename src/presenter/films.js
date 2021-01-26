@@ -9,6 +9,7 @@ import StatButton from '../view/stat-button/stat-button';
 import StatFilter from '../view/stat-filter/stat-filter';
 import FilmListTop from '../view/list-top/list-top';
 import FilmListCommented from '../view/list-commented/list-commented';
+import FilmNumber from '../view/film-number/film-number';
 import Loading from '../view/loading/loading';
 import {render, RenderPosition, remove} from '../utils/render';
 import {getExtraFilms, sortByDate, sortByRating} from '../utils/common';
@@ -19,10 +20,10 @@ import {filter} from '../utils/filter';
 import Filter from '../view/filter/filter';
 
 export default class Films {
-  constructor(rankContainer, filmsContainer, popupContainer, navContainer, bodyElement, filmsModel, api) {
+  constructor(rankContainer, filmsContainer, footerElement, navContainer, bodyElement, filmsModel, api) {
     this._filmsContainer = filmsContainer;
     this._rankContainer = rankContainer;
-    this._popupContainer = popupContainer;
+    this._footerElement = footerElement;
     this._navContainer = navContainer;
     this._bodyElement = bodyElement;
     this._renderedFilmCount = CARD_COUNT_PER_STEP;
@@ -50,6 +51,7 @@ export default class Films {
     this._statComponent = null;
     this._rankComponent = null;
     this._loadingComponent = new Loading();
+    this._filmNumberComponent = null;
 
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
@@ -95,6 +97,8 @@ export default class Films {
     this._showFilms();
 
     this._renderFilmList();
+
+    this._renderFilmNumber();
 
     if (this._getFilms().length) {
       this._renderSort();
@@ -247,7 +251,7 @@ export default class Films {
   _renderFilm(film, container) {
     const filmPresenter = new FilmPresenter(
         container,
-        this._popupContainer,
+        this._footerElement,
         this._bodyElement,
         this._setActiveFilm,
         this._onFilmListUpdate,
@@ -443,6 +447,18 @@ export default class Films {
   }
 
   _renderLoading() {
-    render(this._filmsWrapperComponent, this._loadingComponent, RenderPosition.BEFOREEND);
+    render(
+        this._filmsWrapperComponent,
+        this._loadingComponent,
+        RenderPosition.BEFOREEND);
+  }
+
+  _renderFilmNumber() {
+    this._filmNumberComponent = new FilmNumber(this._getFilms().length);
+    render(
+        this._footerElement,
+        this._filmNumberComponent,
+        RenderPosition.BEFOREEND
+    );
   }
 }
