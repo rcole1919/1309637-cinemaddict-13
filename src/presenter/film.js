@@ -7,7 +7,11 @@ import {
   remove,
   RenderPosition
 } from '../utils/render';
-import {onEscKeyDown, onCtrlEnterDown} from '../utils/common';
+import {
+  onEscKeyDown,
+  onCtrlEnterDown,
+  isOnline
+} from '../utils/common';
 import {UserAction, UpdateType} from '../const';
 import dayjs from 'dayjs';
 import {
@@ -15,6 +19,7 @@ import {
   ERROR_COMMENTS_DELETE,
   COMMENT_DELETING
 } from '../const';
+import {toast} from "../utils/toast.js";
 
 export default class Film {
   constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm, onFilmListUpdate, onViewAction, api) {
@@ -100,6 +105,10 @@ export default class Film {
   }
 
   _onCommentDelete(el) {
+    if (!isOnline()) {
+      toast(`You can't delete comment offline`);
+      return;
+    }
     const delButtonElement = el.getElement().querySelector(`.film-details__comment-delete`);
     delButtonElement.textContent = COMMENT_DELETING;
     this._api.deleteComment(el.commentId)
@@ -120,6 +129,10 @@ export default class Film {
   }
 
   _onCommentAdd() {
+    if (!isOnline()) {
+      toast(`You can't add comment offline`);
+      return;
+    }
     const addCommentElement = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
     if (addCommentElement.classList.contains(`shake`)) {
       addCommentElement.classList.remove(`shake`);
