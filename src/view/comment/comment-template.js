@@ -4,10 +4,6 @@ import he from 'he';
 export const createCommentTemplate = (comment) => {
   const {message, emoji, author, date} = comment;
 
-  // const now = dayjs();
-
-  // console.log(dayjs(date).isAfter(now.subtract(1, `day`)));
-
   return `<li class="film-details__comment">
     <span class="film-details__comment-emoji">
       <img src="./images/emoji/${emoji}.png" width="55" height="55" alt="emoji-smile">

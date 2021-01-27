@@ -36,22 +36,20 @@ export default class Film {
     this._commentComponents = [];
     this._emojiComponent = null;
 
+    this._setActiveFilm = setActiveFilm;
+    this._onFilmListUpdate = onFilmListUpdate;
+    this._onViewAction = onViewAction;
+
     this._onFilmComponentClick = this._onFilmComponentClick.bind(this);
-
     this._onEmojiChange = this._onEmojiChange.bind(this);
-
     this._onWatchlistChange = this._onWatchlistChange.bind(this);
     this._onWatchedChange = this._onWatchedChange.bind(this);
     this._onFavoriteChange = this._onFavoriteChange.bind(this);
     this._onCommentDelete = this._onCommentDelete.bind(this);
     this._onCommentAdd = this._onCommentAdd.bind(this);
-
     this._onClosePopupComponent = this._onClosePopupComponent.bind(this);
     this._onPopupPressEsc = this._onPopupPressEsc.bind(this);
     this._onPopupPressCtrlEnter = this._onPopupPressCtrlEnter.bind(this);
-    this._setActiveFilm = setActiveFilm;
-    this._onFilmListUpdate = onFilmListUpdate;
-    this._onViewAction = onViewAction;
   }
 
   init(film) {
@@ -72,6 +70,16 @@ export default class Film {
 
   setComments(comments) {
     this._comments = comments.slice();
+  }
+
+  setOnEmojiChange() {
+    this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
+      el.addEventListener(`change`, this._onEmojiChange);
+    });
+  }
+
+  destroy() {
+    remove(this._filmComponent);
   }
 
   _renderPopup(isCommentUpload) {
@@ -102,6 +110,39 @@ export default class Film {
 
     document.addEventListener(`keydown`, this._onPopupPressEsc);
     document.addEventListener(`keydown`, this._onPopupPressCtrlEnter);
+  }
+
+  _renderComments() {
+    this._comments.forEach((el, i) => {
+      this._commentComponents.push(new Comment(el));
+      render(
+          this._popupComponent
+          .getElement()
+          .querySelector(`.film-details__comments-list`),
+          this._commentComponents[i],
+          RenderPosition.BEFOREEND);
+    });
+
+    this._popupComponent
+        .getElement()
+        .querySelector(`.film-details__comments-count`)
+        .textContent = this._film.comments.length;
+
+    this._commentComponents.forEach((el) => {
+      el.setOnCommentDelete(() => this._onCommentDelete(el));
+    });
+  }
+
+  _updateComments() {
+    this._api.getComments(this._film)
+      .then((comments) => {
+        this.setComments(comments);
+        this._commentComponents.forEach((el) => {
+          remove(el);
+        });
+        this._commentComponents = [];
+        this._renderComments();
+      });
   }
 
   _onCommentDelete(el) {
@@ -181,39 +222,6 @@ export default class Film {
     }
   }
 
-  _renderComments() {
-    this._comments.forEach((el, i) => {
-      this._commentComponents.push(new Comment(el));
-      render(
-          this._popupComponent
-          .getElement()
-          .querySelector(`.film-details__comments-list`),
-          this._commentComponents[i],
-          RenderPosition.BEFOREEND);
-    });
-
-    this._popupComponent
-        .getElement()
-        .querySelector(`.film-details__comments-count`)
-        .textContent = this._film.comments.length;
-
-    this._commentComponents.forEach((el) => {
-      el.setOnCommentDelete(() => this._onCommentDelete(el));
-    });
-  }
-
-  _updateComments() {
-    this._api.getComments(this._film)
-      .then((comments) => {
-        this.setComments(comments);
-        this._commentComponents.forEach((el) => {
-          remove(el);
-        });
-        this._commentComponents = [];
-        this._renderComments();
-      });
-  }
-
   _onEmojiChange(evt) {
     const emoji = evt.currentTarget.value;
     if (this._emojiComponent !== null) {
@@ -223,12 +231,6 @@ export default class Film {
     const emojiContainer = this._popupComponent.getElement().querySelector(`.film-details__add-emoji-label`);
     emojiContainer.textContent = ``;
     render(emojiContainer, this._emojiComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  setOnEmojiChange() {
-    this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
-      el.addEventListener(`change`, this._onEmojiChange);
-    });
   }
 
   _onFilmComponentClick() {
@@ -293,9 +295,5 @@ export default class Film {
 
   _onPopupPressCtrlEnter(evt) {
     onCtrlEnterDown(evt, this._onCommentAdd);
-  }
-
-  destroy() {
-    remove(this._filmComponent);
   }
 }

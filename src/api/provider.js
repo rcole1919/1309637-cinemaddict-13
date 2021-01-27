@@ -65,6 +65,14 @@ export default class Provider {
     return Promise.reject(new Error(`Add comment failed`));
   }
 
+  getComments(film) {
+    if (isOnline()) {
+      return this._api.getComments(film);
+    }
+
+    return Promise.reject(new Error(`Upload comment failed`));
+  }
+
   sync() {
     if (isOnline()) {
       const storeFilms = Object.values(this._store.getItems());

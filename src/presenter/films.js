@@ -125,49 +125,8 @@ export default class Films {
     }
   }
 
-  _onViewAction(actionType, updateType, update) {
-    switch (actionType) {
-      case UserAction.ADD_COMMENT:
-        this._filmsModel.addComment(updateType, update);
-        break;
-      case UserAction.DELETE_COMMENT:
-        this._filmsModel.deleteComment(updateType, update);
-        break;
-      case UserAction.UPDATE_FILM:
-        this._api.updateFilms(update).then((response) => {
-          this._filmsModel.updateFilm(updateType, response);
-        });
-        break;
-      default:
-        return;
-    }
-  }
-
-  _onModelEvent(updateType) {
-    switch (updateType) {
-      case UpdateType.MAJOR:
-        this._onFilmListUpdate();
-        break;
-      case UpdateType.INIT:
-        this._isLoading = false;
-        remove(this._loadingComponent);
-        this._renderBoard();
-        break;
-    }
-  }
-
-  _onSortTypeChange(sortType) {
-    if (this._currentSortType === sortType) {
-      return;
-    }
-
-    this._currentSortType = sortType;
-    remove(this._sortComponent);
-    this._renderSort();
-    this._clearFilms();
-    this._renderFilmList();
-    this._renderFilms(0, this._renderedFilmCount);
-    this._renderExtraFilm();
+  _getStatFilms() {
+    return this._filmsModel.getFilms();
   }
 
   _renderSort() {
@@ -180,29 +139,6 @@ export default class Films {
       );
       this._sortComponent.setOnSortTypeChange(this._onSortTypeChange);
     }
-  }
-
-  _onFilterTypeChange(filterType) {
-    if (this._currentFilterType === filterType && this._currentViewStateType === ViewStateType.FILMS) {
-      return;
-    }
-
-    this._showFilms();
-    this._currentFilterType = filterType;
-    remove(this._filterComponent);
-    this._renderFilter();
-
-    this._clearFilms();
-    this._renderFilmList();
-    this._renderedFilmCount = CARD_COUNT_PER_STEP;
-    this._renderFilms(0, Math.min(this._getFilms().length, CARD_COUNT_PER_STEP));
-    remove(this._showMoreComponent);
-    if (this._getFilms().length > CARD_COUNT_PER_STEP) {
-      this._renderShowMore();
-    }
-    this._renderExtraFilm();
-    remove(this._sortComponent);
-    this._renderSort();
   }
 
   _renderFilter() {
@@ -375,23 +311,6 @@ export default class Films {
     remove(this._filmListComponent);
   }
 
-  _onFilmListUpdate() {
-    remove(this._filterComponent);
-    this._renderFilter();
-    this._clearFilms();
-    this._renderFilmList();
-    this._renderFilms(0, this._renderedFilmCount);
-    this._renderExtraFilm();
-    remove(this._showMoreComponent);
-    if (this._getFilms().length > CARD_COUNT_PER_STEP) {
-      this._renderShowMore();
-    }
-    remove(this._rankComponent);
-    this._renderRank();
-    remove(this._sortComponent);
-    this._renderSort();
-  }
-
   _renderStatButton() {
     this._statButtonComponent = new StatButton(this._currentViewStateType);
     render(
@@ -403,18 +322,8 @@ export default class Films {
     this._statButtonComponent.setOnStatButtonClick(this._onStatButtonClick);
   }
 
-  _onStatFilterChange(statFilterType) {
-    if (this._currentStatFilterType === statFilterType) {
-      return;
-    }
-
-    this._currentStatFilterType = statFilterType;
-    remove(this._statComponent);
-    this._renderStat();
-  }
-
   _renderStatFilter() {
-    const watchedFilms = this._getFilms().filter((film) => film.isWatched);
+    const watchedFilms = this._getStatFilms().filter((film) => film.isWatched);
     this._statFilterComponent = new StatFilter(watchedFilms, this._currentStatFilterType);
     render(
         this._statWrapperComponent,
@@ -426,17 +335,13 @@ export default class Films {
   }
 
   _renderStat() {
-    const watchedFilms = this._getFilms().filter((film) => film.isWatched);
+    const watchedFilms = this._getStatFilms().filter((film) => film.isWatched);
     this._statComponent = new Stat(watchedFilms, this._currentStatFilterType);
     render(
         this._statWrapperComponent,
         this._statComponent,
         RenderPosition.BEFOREEND
     );
-  }
-
-  _onStatButtonClick() {
-    this._showStats();
   }
 
   _showFilms() {
@@ -495,5 +400,104 @@ export default class Films {
         this._filmNumberComponent,
         RenderPosition.BEFOREEND
     );
+  }
+
+  _onStatButtonClick() {
+    this._showStats();
+  }
+
+  _onStatFilterChange(statFilterType) {
+    if (this._currentStatFilterType === statFilterType) {
+      return;
+    }
+
+    this._currentStatFilterType = statFilterType;
+    remove(this._statComponent);
+    this._renderStat();
+  }
+
+  _onFilmListUpdate() {
+    remove(this._filterComponent);
+    this._renderFilter();
+    this._clearFilms();
+    this._renderFilmList();
+    this._renderFilms(0, this._renderedFilmCount);
+    this._renderExtraFilm();
+    remove(this._showMoreComponent);
+    if (this._getFilms().length > CARD_COUNT_PER_STEP) {
+      this._renderShowMore();
+    }
+    remove(this._rankComponent);
+    this._renderRank();
+    remove(this._sortComponent);
+    this._renderSort();
+  }
+
+  _onViewAction(actionType, updateType, update) {
+    switch (actionType) {
+      case UserAction.ADD_COMMENT:
+        this._filmsModel.addComment(updateType, update);
+        break;
+      case UserAction.DELETE_COMMENT:
+        this._filmsModel.deleteComment(updateType, update);
+        break;
+      case UserAction.UPDATE_FILM:
+        this._api.updateFilms(update).then((response) => {
+          this._filmsModel.updateFilm(updateType, response);
+        });
+        break;
+      default:
+        return;
+    }
+  }
+
+  _onModelEvent(updateType) {
+    switch (updateType) {
+      case UpdateType.MAJOR:
+        this._onFilmListUpdate();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
+        this._renderBoard();
+        break;
+    }
+  }
+
+  _onSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._currentSortType = sortType;
+    remove(this._sortComponent);
+    this._renderSort();
+    this._clearFilms();
+    this._renderFilmList();
+    this._renderFilms(0, this._renderedFilmCount);
+    this._renderExtraFilm();
+  }
+
+  _onFilterTypeChange(filterType) {
+    if (this._currentFilterType === filterType && this._currentViewStateType === ViewStateType.FILMS) {
+      return;
+    }
+
+    this._showFilms();
+    this._currentFilterType = filterType;
+    remove(this._filterComponent);
+    this._renderFilter();
+
+    this._clearFilms();
+    this._renderFilmList();
+    this._renderedFilmCount = CARD_COUNT_PER_STEP;
+    this._renderFilms(0, Math.min(this._getFilms().length, CARD_COUNT_PER_STEP));
+    remove(this._showMoreComponent);
+    if (this._getFilms().length > CARD_COUNT_PER_STEP) {
+      this._renderShowMore();
+    }
+    this._renderExtraFilm();
+    remove(this._sortComponent);
+    this._renderSort();
   }
 }
