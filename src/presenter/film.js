@@ -7,7 +7,11 @@ import {
   remove,
   RenderPosition
 } from '../utils/render';
-import {onEscKeyDown, onCtrlEnterDown} from '../utils/common';
+import {
+  onEscKeyDown,
+  onCtrlEnterDown,
+  isOnline
+} from '../utils/common';
 import {UserAction, UpdateType} from '../const';
 import dayjs from 'dayjs';
 import {
@@ -15,6 +19,7 @@ import {
   ERROR_COMMENTS_DELETE,
   COMMENT_DELETING
 } from '../const';
+import {toast} from "../utils/toast.js";
 
 export default class Film {
   constructor(filmListContainer, popupContainer, bodyElement, setActiveFilm, onFilmListUpdate, onViewAction, api) {
@@ -31,22 +36,20 @@ export default class Film {
     this._commentComponents = [];
     this._emojiComponent = null;
 
+    this._setActiveFilm = setActiveFilm;
+    this._onFilmListUpdate = onFilmListUpdate;
+    this._onViewAction = onViewAction;
+
     this._onFilmComponentClick = this._onFilmComponentClick.bind(this);
-
     this._onEmojiChange = this._onEmojiChange.bind(this);
-
     this._onWatchlistChange = this._onWatchlistChange.bind(this);
     this._onWatchedChange = this._onWatchedChange.bind(this);
     this._onFavoriteChange = this._onFavoriteChange.bind(this);
     this._onCommentDelete = this._onCommentDelete.bind(this);
     this._onCommentAdd = this._onCommentAdd.bind(this);
-
     this._onClosePopupComponent = this._onClosePopupComponent.bind(this);
     this._onPopupPressEsc = this._onPopupPressEsc.bind(this);
     this._onPopupPressCtrlEnter = this._onPopupPressCtrlEnter.bind(this);
-    this._setActiveFilm = setActiveFilm;
-    this._onFilmListUpdate = onFilmListUpdate;
-    this._onViewAction = onViewAction;
   }
 
   init(film) {
@@ -67,6 +70,16 @@ export default class Film {
 
   setComments(comments) {
     this._comments = comments.slice();
+  }
+
+  setOnEmojiChange() {
+    this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
+      el.addEventListener(`change`, this._onEmojiChange);
+    });
+  }
+
+  destroy() {
+    remove(this._filmComponent);
   }
 
   _renderPopup(isCommentUpload) {
@@ -97,75 +110,6 @@ export default class Film {
 
     document.addEventListener(`keydown`, this._onPopupPressEsc);
     document.addEventListener(`keydown`, this._onPopupPressCtrlEnter);
-  }
-
-  _onCommentDelete(el) {
-    const delButtonElement = el.getElement().querySelector(`.film-details__comment-delete`);
-    delButtonElement.textContent = COMMENT_DELETING;
-    this._api.deleteComment(el.commentId)
-      .then(() => {
-        this._onViewAction(
-            UserAction.DELETE_COMMENT,
-            UpdateType.MAJOR,
-            {
-              filmId: this._film.id,
-              commentId: el.commentId
-            }
-        );
-        this._updateComments();
-      })
-      .catch(() => {
-        delButtonElement.textContent = ERROR_COMMENTS_DELETE;
-      });
-  }
-
-  _onCommentAdd() {
-    const addCommentElement = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
-    if (addCommentElement.classList.contains(`shake`)) {
-      addCommentElement.classList.remove(`shake`);
-    }
-
-    const inputElement = this._popupComponent.getElement().querySelector(`.film-details__comment-input`);
-    const imgElement = this._popupComponent.getElement().querySelector(`.film-details__add-emoji-label img`);
-    if (
-      inputElement.value &&
-      imgElement &&
-      inputElement === document.activeElement
-    ) {
-      const commentText = inputElement.value;
-      const commentEmoji = imgElement.dataset.emoji;
-      const newComment = {
-        message: commentText,
-        date: new Date(),
-        emoji: commentEmoji
-      };
-
-      inputElement.disabled = true;
-
-      this._api.addComment(this._film.id, newComment)
-        .then((response) => {
-          this._onViewAction(
-              UserAction.ADD_COMMENT,
-              UpdateType.MAJOR,
-              {
-                filmId: this._film.id,
-                comments: response.comments
-              }
-          );
-          this._updateComments();
-          this._popupComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
-          this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
-            el.checked = false;
-          });
-          remove(this._emojiComponent);
-          this._emojiComponent = null;
-          inputElement.disabled = false;
-        })
-        .catch(() => {
-          inputElement.disabled = false;
-          addCommentElement.classList.add(`shake`);
-        });
-    }
   }
 
   _renderComments() {
@@ -201,6 +145,83 @@ export default class Film {
       });
   }
 
+  _onCommentDelete(el) {
+    if (!isOnline()) {
+      toast(`You can't delete comment offline`);
+      return;
+    }
+    const delButtonElement = el.getElement().querySelector(`.film-details__comment-delete`);
+    delButtonElement.textContent = COMMENT_DELETING;
+    this._api.deleteComment(el.commentId)
+      .then(() => {
+        this._onViewAction(
+            UserAction.DELETE_COMMENT,
+            UpdateType.MAJOR,
+            {
+              filmId: this._film.id,
+              commentId: el.commentId
+            }
+        );
+        this._updateComments();
+      })
+      .catch(() => {
+        delButtonElement.textContent = ERROR_COMMENTS_DELETE;
+      });
+  }
+
+  _onCommentAdd() {
+    if (!isOnline()) {
+      toast(`You can't add comment offline`);
+      return;
+    }
+    const addCommentElement = this._popupComponent.getElement().querySelector(`.film-details__new-comment`);
+    if (addCommentElement.classList.contains(`shake`)) {
+      addCommentElement.classList.remove(`shake`);
+    }
+
+    const inputElement = this._popupComponent.getElement().querySelector(`.film-details__comment-input`);
+    const imgElement = this._popupComponent.getElement().querySelector(`.film-details__add-emoji-label img`);
+    if (
+      inputElement.value &&
+      imgElement &&
+      inputElement === document.activeElement
+    ) {
+      const commentText = inputElement.value;
+      const commentEmoji = imgElement.dataset.emoji;
+      const newComment = {
+        message: commentText,
+        date: new Date(),
+        emoji: commentEmoji
+      };
+
+      inputElement.disabled = true;
+
+      this._api.addComment(this._film.id, newComment)
+        .then((response) => {
+          this._onViewAction(
+              UserAction.ADD_COMMENT,
+              UpdateType.MAJOR,
+              {
+                filmId: this._film.id,
+                comments: response.movie.comments
+              }
+          );
+          this._updateComments();
+          this._popupComponent.getElement().querySelector(`.film-details__comment-input`).value = ``;
+          this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
+            el.checked = false;
+          });
+          remove(this._emojiComponent);
+          this._emojiComponent = null;
+          inputElement.disabled = false;
+        })
+        .catch(() => {
+          inputElement.disabled = false;
+          addCommentElement.classList.add(`shake`);
+        });
+    }
+  }
+
   _onEmojiChange(evt) {
     const emoji = evt.currentTarget.value;
     if (this._emojiComponent !== null) {
@@ -210,12 +231,6 @@ export default class Film {
     const emojiContainer = this._popupComponent.getElement().querySelector(`.film-details__add-emoji-label`);
     emojiContainer.textContent = ``;
     render(emojiContainer, this._emojiComponent, RenderPosition.AFTERBEGIN);
-  }
-
-  setOnEmojiChange() {
-    this._popupComponent.getElement().querySelectorAll(`.film-details__emoji-item`).forEach((el) => {
-      el.addEventListener(`change`, this._onEmojiChange);
-    });
   }
 
   _onFilmComponentClick() {
@@ -280,9 +295,5 @@ export default class Film {
 
   _onPopupPressCtrlEnter(evt) {
     onCtrlEnterDown(evt, this._onCommentAdd);
-  }
-
-  destroy() {
-    remove(this._filmComponent);
   }
 }

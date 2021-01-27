@@ -128,3 +128,7 @@ export const getChartData = (films) => {
     data: chartData
   };
 };
+
+export const isOnline = () => {
+  return window.navigator.onLine;
+};

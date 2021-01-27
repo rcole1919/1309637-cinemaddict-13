@@ -12,6 +12,8 @@ export const COMMENT_DELETING = `deleting`;
 
 export const ERROR_COMMENTS_DELETE = `failed to delete, try later`;
 
+export const TOAST_SHOW_TIME = 5000;
+
 export const RankType = {
   NOVICE: `novice`,
   FAN: `fan`,
