@@ -1,5 +1,8 @@
 import dayjs from 'dayjs';
 import he from 'he';
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 export const createCommentTemplate = (comment) => {
   const {message, emoji, author, date} = comment;
@@ -12,7 +15,7 @@ export const createCommentTemplate = (comment) => {
       <p class="film-details__comment-text">${he.encode(message)}</p>
       <p class="film-details__comment-info">
         <span class="film-details__comment-author">${author}</span>
-        <span class="film-details__comment-day">${dayjs(date.toString()).format(`YYYY/MM/DD HH:mm`)}</span>
+        <span class="film-details__comment-day">${dayjs(date).fromNow()}</span>
         <button class="film-details__comment-delete">Delete</button>
       </p>
     </div>
