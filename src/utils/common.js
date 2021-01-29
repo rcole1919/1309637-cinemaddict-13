@@ -41,8 +41,8 @@ export const onCtrlEnterDown = (evt, cb) => {
 export const getExtraFilms = (arr, field) => {
   const extraFilms = arr.slice()
   .sort((a, b) => {
-    let x = a[field];
-    let y = b[field];
+    const x = a[field];
+    const y = b[field];
     if (x > y) {
       return -1;
     }
@@ -62,8 +62,8 @@ export const sortByDate = (filmA, filmB) => {
 };
 
 export const sortByRating = (filmA, filmB) => {
-  let a = filmA.rating;
-  let b = filmB.rating;
+  const a = filmA.rating;
+  const b = filmB.rating;
   if (a > b) {
     return -1;
   }
@@ -75,14 +75,14 @@ export const sortByRating = (filmA, filmB) => {
 
 export const getTopGenre = (films) => {
   if (films.length !== 0) {
-    let allGenres = [];
+    const allGenres = [];
     films.forEach((el) => {
       allGenres.push(...el.genre);
     });
 
-    let genreKeys = Array.from(new Set(allGenres));
+    const genreKeys = Array.from(new Set(allGenres));
 
-    let genresLength = [];
+    const genresLength = [];
 
     genreKeys.forEach((el) => {
       genresLength.push({
@@ -97,12 +97,12 @@ export const getTopGenre = (films) => {
 };
 
 export const getChartData = (films) => {
-  let allGenres = [];
+  const allGenres = [];
   films.forEach((el) => {
     allGenres.push(...el.genre);
   });
-  let genreKeys = Array.from(new Set(allGenres));
-  let genresLength = [];
+  const genreKeys = Array.from(new Set(allGenres));
+  const genresLength = [];
 
   genreKeys.forEach((el) => {
     genresLength.push({
@@ -115,11 +115,11 @@ export const getChartData = (films) => {
     .sort((a, b) => a.num - b.num)
     .reverse();
 
-  let chartLabels = [];
+  const chartLabels = [];
   genresLength.forEach((el) => {
     chartLabels.push(el.genre);
   });
-  let chartData = [];
+  const chartData = [];
   genresLength.forEach((el) => {
     chartData.push(el.num);
   });
