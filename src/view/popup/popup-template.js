@@ -6,9 +6,13 @@ export const createPopupTemplate = (film) => {
 
   const generateGenres = (arr) => {
     let sum = ``;
-    for (let item of arr) {
-      sum += `<span class="film-details__genre">${item}</span>`;
-    }
+    // for (let item of arr) {
+    //   sum += `<span class="film-details__genre">${item}</span>`;
+    // }
+
+    arr.forEach((el) => {
+      sum += `<span class="film-details__genre">${el}</span>`;
+    });
     return sum;
   };
 
