@@ -1,5 +1,10 @@
 import dayjs from 'dayjs';
-import {CARD_EXTRA_COUNT, RankType} from '../const';
+import {
+  CARD_EXTRA_COUNT,
+  NOVICE_FILM_COUNT,
+  FAN_FILM_COUNT,
+  RankType
+} from '../const';
 
 export const getFilmDuration = (min) => {
   const hoursValue = Math.floor(min / 60);
@@ -13,11 +18,11 @@ export const getFilmDuration = (min) => {
 
 export const getRank = (num) => {
   switch (true) {
-    case num >= 1 && num <= 10:
+    case num > 0 && num <= NOVICE_FILM_COUNT:
       return RankType.NOVICE;
-    case num >= 11 && num <= 20:
+    case num > NOVICE_FILM_COUNT && num <= FAN_FILM_COUNT:
       return RankType.FAN;
-    case num >= 21:
+    case num > FAN_FILM_COUNT:
       return RankType.MOVIE_BUFF;
     default:
       return RankType.NONE;
@@ -32,7 +37,7 @@ export const onEscKeyDown = (evt, cb) => {
 };
 
 export const onCtrlEnterDown = (evt, cb) => {
-  if (evt.ctrlKey && evt.key === `Enter`) {
+  if ((evt.ctrlKey || evt.metaKey) && evt.key === `Enter`) {
     evt.preventDefault();
     cb();
   }

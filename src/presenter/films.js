@@ -3,12 +3,12 @@ import Rank from '../view/rank/rank';
 import FilmsWrapper from '../view/films-wrapper/films-wrapper';
 import StatWrapper from '../view/stat-wrapper/stat-wrapper';
 import ShowMore from '../view/show-more/show-more';
-import FilmList from '../view/list/list';
+import FilmList from '../view/film-list/film-list';
 import Stat from '../view/stat/stat';
 import StatButton from '../view/stat-button/stat-button';
 import StatFilter from '../view/stat-filter/stat-filter';
-import FilmListTop from '../view/list-top/list-top';
-import FilmListCommented from '../view/list-commented/list-commented';
+import FilmListTop from '../view/film-list-top/film-list-top';
+import FilmListCommented from '../view/film-list-commented/film-list-commented';
 import FilmNumber from '../view/film-number/film-number';
 import Loading from '../view/loading/loading';
 import {render, RenderPosition, remove} from '../utils/render';
@@ -476,6 +476,9 @@ export default class Films {
     this._renderFilmList();
     this._renderFilms(0, this._renderedFilmCount);
     this._renderExtraFilm();
+    if (this._getFilms().length > CARD_COUNT_PER_STEP && this._renderedFilmCount < this._getFilms().length) {
+      this._renderShowMore();
+    }
   }
 
   _onFilterTypeChange(filterType) {
